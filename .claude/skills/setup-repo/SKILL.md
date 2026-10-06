@@ -52,9 +52,11 @@ Vercel Hobby con repo privata pubblica solo i commit del proprietario: l'email d
 essere riconosciuta da GitHub come sua. Prima di qualunque commit, imposta l'identità **solo per
 questa repo** con l'email noreply dell'account (sempre associata all'account):
 
+Leggi login, nome e ID numerico con `gh api user --jq '.login, .name, .id'`, poi:
+
 ```bash
-git config user.name "$(gh api user --jq '.name // .login')"
-git config user.email "$(gh api user --jq '"\(.id)+\(.login)@users.noreply.github.com"')"
+git config user.name "NOME VISUALIZZATO"
+git config user.email "ID+LOGIN@users.noreply.github.com"
 ```
 
 Senza GitHub CLI: chiedi all'utente username e ID numerico (https://api.github.com/users/USERNAME → `id`)

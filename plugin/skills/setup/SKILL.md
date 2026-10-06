@@ -91,10 +91,16 @@ Se l'utente proseguirà **sul computer** e hai la shell: chiedi la cartella di d
 
 ```bash
 gh repo clone OWNER/NOME "CARTELLA/NOME"    # oppure: git clone https://github.com/OWNER/NOME.git
-cd "CARTELLA/NOME"
-# autore dei commit = account GitHub del proprietario (requisito Vercel Hobby, vedi A1)
-git config user.name "$(gh api user --jq '.name // .login')"
-git config user.email "$(gh api user --jq '"\(.id)+\(.login)@users.noreply.github.com"')"
+```
+
+Poi, nella cartella clonata, imposta l'autore dei commit sull'account GitHub del proprietario
+(requisito Vercel Hobby, vedi A1). Leggi login, nome e ID numerico con
+`gh api user --jq '.login, .name, .id'` (senza CLI: chiedili all'utente) e scrivili nella config
+**locale** della repo:
+
+```bash
+git config user.name "NOME VISUALIZZATO"
+git config user.email "ID+LOGIN@users.noreply.github.com"
 ```
 
 ## A4 — Progetto Vercel con il nome scelto
@@ -150,9 +156,9 @@ Il resto (contenuti, CMS, form contatti, dominio) lo guida la skill `/setup` con
 Le skill di una repo si caricano solo in una sessione **aperta su quella repo**: questa sessione non
 le vede, quindi serve una nuova sessione. Dai all'utente le istruzioni per la strada scelta in A1:
 
-- **Sul computer:** apri la cartella `CARTELLA/NOME` in Claude Code — terminale: `cd "CARTELLA/NOME" && claude`;
-  app desktop: scheda Code → nuova sessione → scegli la cartella — poi scrivi `/setup`.
-  (Se non è stata clonata: `git clone https://github.com/OWNER/NOME.git` prima.)
+- **Sul computer:** apri la cartella `CARTELLA/NOME` in Claude Code — da terminale spostati nella
+  cartella e avvia Claude Code; dall'app desktop: scheda Code → nuova sessione → scegli la cartella —
+  poi scrivi `/setup`. Se la repo non è ancora sul computer, prima clonala come in A3.
 - **Nel cloud:** installa la Claude GitHub App sulla repo (https://github.com/apps/claude → Configure →
   aggiungi `NOME`), apri https://claude.ai/code, avvia una sessione sulla repo `OWNER/NOME`, abilita il
   connettore Vercel per la sessione e scrivi `/setup`. In cloud le immagini delle opere si caricano poi

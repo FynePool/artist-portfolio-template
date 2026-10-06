@@ -1,45 +1,40 @@
-# Privacy — plugin Artist Portfolio
+# Privacy — Artist Portfolio plugin
 
-Ultimo aggiornamento: 6 ottobre 2026
+Last updated: October 6, 2026
 
-*English summary: this plugin is a set of instructions for Claude. Its publisher runs no server and
-collects, receives or stores no data. While you use it, Claude acts only through the GitHub and
-Vercel tools you have authorized, on your own accounts.*
+## The publisher collects no data
 
-## Chi pubblica il plugin non raccoglie dati
+The plugin only contains instructions for Claude (one skill). It includes no server, script,
+analytics or telemetry: its publisher receives, collects and stores no user data.
 
-Il plugin contiene solo istruzioni per Claude (una skill). Non include server, script, analytics o
-telemetria: chi lo pubblica non riceve, non raccoglie e non conserva alcun dato degli utenti.
+## What data is used while you use it
 
-## Quali dati vengono usati durante l'uso
+When you use the plugin, Claude works through the tools you have connected, on your own accounts:
 
-Quando usi il plugin, Claude lavora con gli strumenti che hai collegato tu e sui tuoi account:
+- **GitHub** (GitHub CLI or connector): reads your account's username, display name and numeric ID
+  to create the repository in your account and to set the commit author; writes files to your new
+  repository.
+- **Vercel** (connector or CLI): reads your account's teams and projects to create and check the
+  site's project.
+- **Read-only HTTP requests** to `name.vercel.app` to check that the name is available and that the
+  site is online.
 
-- **GitHub** (GitHub CLI o connettore): legge username, nome visualizzato e ID numerico del tuo
-  account per creare la repo nel tuo account e per impostare l'autore dei commit; scrive file nella
-  tua nuova repo.
-- **Vercel** (connettore o CLI): legge team e progetti del tuo account per creare e controllare il
-  progetto del sito.
-- **Richieste HTTP di sola lettura** all'indirizzo `nome.vercel.app` per verificare la disponibilità
-  del nome e che il sito sia online.
+This data goes only to GitHub and Vercel, under their privacy policies, and stays in your accounts.
+Your conversation with Claude is handled by Anthropic under its terms and privacy policy.
 
-Questi dati vanno solo a GitHub e Vercel, secondo le loro informative privacy, e restano nei tuoi
-account. La conversazione con Claude è trattata da Anthropic secondo le sue condizioni e la sua
-informativa privacy.
+The plugin never asks for or stores passwords, tokens or other secrets.
 
-Il plugin non chiede né memorizza password, token o altri segreti.
+## The site you create
 
-## Il sito che crei
+The portfolio built from the template is your own website: you decide which services it uses (for
+example Vercel Web Analytics or the Web3Forms contact form), and you are the controller of your
+visitors' data, with the related obligations towards them.
 
-Il portfolio creato con il template è un sito tuo: decidi tu quali servizi usare (per esempio
-Vercel Web Analytics o il form contatti Web3Forms) e sei tu il titolare dei dati dei visitatori del
-sito, con i relativi obblighi verso di loro.
+## Age
 
-## Età
+The plugin is intended for adult users.
 
-Il plugin è pensato per utenti maggiorenni.
+## Contact
 
-## Contatti
-
-Per domande su questa informativa apri una issue su
+For questions about this notice, open an issue at
 https://github.com/FynePool/artist-portfolio-template/issues

@@ -1,6 +1,6 @@
 {
   "name": "artist-portfolio-template",
-  "description": "Marketplace del template artist-portfolio-template: un plugin per creare e mettere online un portfolio d'artista.",
+  "description": "Marketplace for artist-portfolio-template: one plugin to create and publish an artist portfolio website.",
   "owner": {
     "name": "FynePool",
     "url": "https://github.com/FynePool"
@@ -9,9 +9,16 @@
     {
       "name": "artist-portfolio",
       "source": "./plugin",
-      "description": "Crea un portfolio d'artista dal template: repo GitHub privata, sito online su Vercel (nome.vercel.app) e setup guidato di contenuti, CMS e form contatti.",
+      "description": "Create an artist portfolio from the template: private GitHub repository, live site on Vercel (name.vercel.app) and guided setup of content, CMS and contact form.",
       "category": "productivity",
-      "tags": ["portfolio", "artist", "nextjs", "vercel", "decap-cms", "template"]
+      "tags": [
+        "portfolio",
+        "artist",
+        "nextjs",
+        "vercel",
+        "decap-cms",
+        "template"
+      ]
     }
   ]
 }

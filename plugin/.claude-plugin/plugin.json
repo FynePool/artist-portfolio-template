@@ -1,8 +1,8 @@
 {
   "name": "artist-portfolio",
   "displayName": "Artist Portfolio",
-  "version": "0.1.0",
-  "description": "Crea un portfolio d'artista da FynePool/artist-portfolio-template: verifica i requisiti, crea la repo privata, mette il sito online su Vercel e passa al setup guidato nella repo.",
+  "version": "0.1.1",
+  "description": "Create an artist portfolio website from FynePool/artist-portfolio-template: checks prerequisites, creates your private GitHub repository, puts the site online on Vercel and hands off to the guided setup inside the repository.",
   "author": {
     "name": "riccardomrocco",
     "url": "https://github.com/FynePool"

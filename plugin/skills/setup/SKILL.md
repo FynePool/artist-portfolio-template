@@ -1,163 +1,169 @@
 ---
 name: setup
-description: Crea da zero un portfolio d'artista dal template FynePool/artist-portfolio-template — verifica i requisiti (account GitHub e Vercel, connettori), crea la repo privata dal template, crea il progetto Vercel con il nome scelto (nome.vercel.app), mette il sito online e passa al setup guidato dentro la repo (/setup). Usala quando l'utente vuole creare, avviare o mettere online un nuovo portfolio d'artista.
+description: Create an artist portfolio website from scratch using the FynePool/artist-portfolio-template — check prerequisites (GitHub and Vercel accounts, connectors), create a private repository from the template, create a Vercel project with the chosen name (name.vercel.app), put the site online, then hand off to the guided setup that lives inside the repository (/setup). Use it when the user wants to create, start or publish a new artist portfolio.
 ---
 
-# Nuovo portfolio d'artista — avvio
+# New artist portfolio — kickoff
 
-Porti l'utente dal nulla a un sito online su `NOME.vercel.app` con la sua repo GitHub privata,
-poi gli passi il testimone per il setup completo, che vive **dentro la repo** (skill `/setup`).
+Take the user from nothing to a live site at `NAME.vercel.app` backed by their own private GitHub
+repository, then hand over to the full setup, which lives **inside the repository** (`/setup` skill).
 
-Rispondi nella lingua dell'utente (default: italiano). Un passaggio alla volta.
+**Language:** always reply in the user's language. These instructions are in English; translate any
+text you are told to quote (e.g. the Hobby plan notice) into the user's language.
+One step at a time.
 
-## Regole
+## Rules
 
-- **Nessun passaggio saltato.** Tieni una todo list con A1–A7. Un passaggio è chiuso solo quando
-  la sua **verifica** (indicata sotto) è riuscita; annota l'evidenza (es. "repo mario/portfolio, privata").
-- **Conferma prima di ogni azione esterna**: creare la repo, creare il progetto Vercel, commit/push.
-- **Account e login sono dell'utente**: non creare account, non inserire password o token.
-  Nessun segreto passa dalla chat.
-- Il template è `FynePool/artist-portfolio-template`.
+- **No step is skipped.** Keep a todo list with A1–A7. A step is closed only when its
+  **verification** (given below) succeeded; note the evidence (e.g. "repo mario/portfolio, private").
+- **Confirm before every external action**: creating the repository, creating the Vercel project, commit/push.
+- **Accounts and logins belong to the user**: never create accounts, never type passwords or tokens.
+  No secret goes through the chat.
+- The template is `FynePool/artist-portfolio-template`. The generated website, its admin panel (CMS)
+  and the guided setup inside the repository are currently in Italian: say so up front, the user can
+  translate the site's texts during the setup.
 
-## A1 — Requisiti
+## A1 — Prerequisites
 
-Presentali **tutti in un solo messaggio**, spiegando perché servono, poi verifica quelli verificabili.
+Present them **all in a single message**, explaining why each is needed, then verify what can be verified.
 
-1. **Chi sarà il proprietario.** GitHub, Vercel e login al CMS devono essere **della stessa persona**
-   (di norma l'artista). Motivo: con il piano Vercel gratuito (Hobby) e una repo privata, Vercel
-   pubblica solo le modifiche fatte dal proprietario dell'account; se il CMS viene usato da un altro
-   account GitHub, gli aggiornamenti del sito vengono bloccati. Se più persone devono modificare i
-   contenuti servono il piano Pro o una repo pubblica: dillo ora, non a metà setup.
-2. **Account GitHub** personale (non un'organizzazione: Hobby non pubblica repo private di organizzazioni).
-3. **Account Vercel** (piano Hobby gratuito) **collegato allo stesso account GitHub**
-   (Vercel → Account Settings → Authentication / Login Connections) e con l'app GitHub di Vercel
-   autorizzata sulle repo (https://github.com/apps/vercel → Configure; "All repositories" è il
-   modo più semplice, altrimenti aggiungeremo la nuova repo dopo averla creata).
-4. **Avviso piano Hobby** — riportalo con queste parole e chiedi conferma di averlo letto:
-   > Il piano Hobby è solo per uso personale non commerciale. Il sito può essere una **vetrina**
-   > delle opere; se vuoi pubblicizzarne o gestirne la vendita (prezzi, "acquista", pagamenti)
-   > Vercel richiede il piano Pro. La scelta è tua.
-   > Dettagli: https://vercel.com/docs/limits/fair-use-guidelines#commercial-usage
-5. **Accesso di Claude a Vercel**: connettore Vercel autorizzato (claude.ai → Impostazioni →
-   Connettori; in Claude Code anche `/mcp`), oppure — in Claude Code sul computer — Vercel CLI
-   con `vercel login` eseguito dall'utente.
-6. **Accesso di Claude a GitHub** (consigliato): in Claude Code sul computer, GitHub CLI con
-   `gh auth login` eseguito dall'utente → la repo la creo io. Senza, l'utente fa un click su
-   "Use this template". Il connettore GitHub è utile ma non indispensabile.
-7. **Dove proseguirai il setup** (serve Claude Code): sul computer (terminale o app desktop, consigliato
-   se le immagini delle opere sono sul computer) oppure nel cloud su claude.ai/code (piano Pro, Max o
-   Team; si installerà la Claude GitHub App sulla nuova repo).
-8. Facoltativo: connettore Gmail (per recuperare in automatico la chiave del form contatti).
+1. **Who will own the site.** GitHub, Vercel and the CMS login must belong to **the same person**
+   (usually the artist). Reason: on Vercel's free plan (Hobby) with a private repository, Vercel only
+   deploys changes made by the account owner; if the CMS is used by another GitHub account, site
+   updates are blocked. If several people must edit the content, the Pro plan or a public repository
+   is needed: say it now, not halfway through.
+2. **A personal GitHub account** (not an organization: Hobby does not deploy private organization repositories).
+3. **A Vercel account** (free Hobby plan) **linked to the same GitHub account**
+   (Vercel → Account Settings → Authentication / Login Connections), with Vercel's GitHub app
+   authorized on the repositories (https://github.com/apps/vercel → Configure; "All repositories" is
+   simplest, otherwise the new repository is added after it is created).
+4. **Hobby plan notice** — convey it with this meaning (in the user's language) and ask them to
+   confirm they read it:
+   > The Hobby plan is for personal, non-commercial use only. The site can be a **showcase** of the
+   > artworks; to advertise or handle their sale (prices, "buy", payments) Vercel requires the Pro
+   > plan. The choice is yours.
+   > Details: https://vercel.com/docs/limits/fair-use-guidelines#commercial-usage
+5. **Claude's access to Vercel**: Vercel connector authorized (claude.ai → Settings → Connectors;
+   in Claude Code also `/mcp`), or — in Claude Code on the computer — the Vercel CLI with
+   `vercel login` run by the user.
+6. **Claude's access to GitHub** (recommended): in Claude Code on the computer, the GitHub CLI with
+   `gh auth login` run by the user → Claude creates the repository. Without it, the user clicks
+   "Use this template". The GitHub connector is useful but not required.
+7. **Where the setup will continue** (requires Claude Code): on the computer (terminal or desktop
+   app; recommended when the artwork images are on the computer) or in the cloud at claude.ai/code
+   (Pro, Max or Team plan; the Claude GitHub App will be installed on the new repository).
+8. Optional: Gmail connector (to fetch the contact form key automatically later in the setup).
 
-Verifiche (fai quelle possibili con gli strumenti presenti, senza chiedere credenziali):
-- Vercel: connettore → elenco team (prendi il team personale) oppure `vercel whoami`.
-- GitHub: `gh auth status` e `gh api user --jq .login`, oppure connettore GitHub (utente corrente).
-- Stesso proprietario: lo username GitHub verificato deve essere quello con cui l'utente accede a Vercel
-  e con cui accederà al CMS. Chiedilo esplicitamente e annota la risposta.
+Verifications (do the ones available with the present tools, never asking for credentials):
+- Vercel: connector → list teams (take the personal team), or `vercel whoami`.
+- GitHub: `gh auth status` and `gh api user --jq .login`, or the GitHub connector (current user).
+- Single owner: the verified GitHub username must be the one the user signs in to Vercel with and
+  will use for the CMS. Ask explicitly and record the answer.
 
-Chiudi A1 solo con: avviso Hobby confermato, proprietario unico confermato, almeno una strada per
-Vercel funzionante (connettore o CLI). Senza accesso a Vercel fermati e spiega come attivarlo.
+Close A1 only with: Hobby notice confirmed, single owner confirmed, at least one working way to
+reach Vercel (connector or CLI). Without Vercel access, stop and explain how to enable it.
 
-## A2 — Nome del sito
+## A2 — Site name
 
-Chiedi il nome (es. `mario-rossi`): diventa il nome della repo e l'indirizzo `NOME.vercel.app`.
-Regole: minuscole, numeri, trattini; inizia con una lettera; massimo 40 caratteri.
+Ask for the name (e.g. `mario-rossi`): it becomes the repository name and the address `NAME.vercel.app`.
+Rules: lowercase letters, digits, hyphens; starts with a letter; at most 40 characters.
 
-Verifica la disponibilità:
-- GitHub: `gh repo view OWNER/NOME` deve fallire con "not found" (o connettore: repo inesistente).
-- Vercel: fai una richiesta HTTP HEAD all'indirizzo `NOME.vercel.app` (https): risposta `404` con header
-  `x-vercel-error: DEPLOYMENT_NOT_FOUND` ⇒ libero; `200` ⇒ già usato, proponi alternative (`NOME-art`, `NOME-studio`…). Se non puoi fare
-  richieste HTTP, la conferma arriva in A4 (dominio effettivamente assegnato).
+Check availability:
+- GitHub: `gh repo view OWNER/NAME` must fail with "not found" (or connector: repository doesn't exist).
+- Vercel: send an HTTP HEAD request to `NAME.vercel.app` (https): a `404` response with header
+  `x-vercel-error: DEPLOYMENT_NOT_FOUND` ⇒ free; `200` ⇒ taken, suggest alternatives (`NAME-art`,
+  `NAME-studio`…). If you can't make HTTP requests, confirmation comes in A4 (domain actually assigned).
 
-## A3 — Repo privata dal template
+## A3 — Private repository from the template
 
-**Lo faccio io (GitHub CLI):**
+**Done by Claude (GitHub CLI):**
 
 ```bash
-gh repo create OWNER/NOME --template FynePool/artist-portfolio-template --private
-# la copia dal template è asincrona: attendi che i file siano disponibili (ripeti per ~30 s)
-gh api repos/OWNER/NOME/contents/package.json --jq .name
+gh repo create OWNER/NAME --template FynePool/artist-portfolio-template --private
+# copying from a template is asynchronous: wait until the files are available (retry for ~30 s)
+gh api repos/OWNER/NAME/contents/package.json --jq .name
 ```
 
-**Passo passo (senza GitHub CLI):** l'utente apre
-https://github.com/FynePool/artist-portfolio-template/generate → Owner: il suo account →
-Repository name: `NOME` → **Private** → **Create repository**, e ti conferma.
+**Step by step (without GitHub CLI):** the user opens
+https://github.com/FynePool/artist-portfolio-template/generate → Owner: their account →
+Repository name: `NAME` → **Private** → **Create repository**, then confirms.
 
-Verifica: la repo esiste, è **privata** (`gh repo view OWNER/NOME --json visibility` → `PRIVATE`,
-o connettore, o conferma dell'utente dalla pagina della repo) e contiene `package.json`.
+Verification: the repository exists, is **private** (`gh repo view OWNER/NAME --json visibility` →
+`PRIVATE`, or connector, or the user confirms from the repository page) and contains `package.json`.
 
-Se l'utente proseguirà **sul computer** e hai la shell: chiedi la cartella di destinazione
-(es. `~/Documents`) e clona la repo `OWNER/NOME` in `CARTELLA/NOME` con GitHub CLI (o con git).
-Poi, nella cartella clonata, imposta l'autore dei commit sull'account GitHub del proprietario
-(requisito Vercel Hobby, vedi A1). Leggi login, nome e ID numerico con
-`gh api user --jq '.login, .name, .id'` (senza CLI: chiedili all'utente) e scrivili nella config
-**locale** della repo:
+If the user will continue **on the computer** and you have a shell: ask for the destination folder
+(e.g. `~/Documents`) and clone `OWNER/NAME` into `FOLDER/NAME` with the GitHub CLI (or git).
+Then, in the cloned folder, set the commit author to the owner's GitHub account (Vercel Hobby
+requirement, see A1). Read login, display name and numeric ID with
+`gh api user --jq '.login, .name, .id'` (without the CLI: ask the user) and write them to the
+repository's **local** config:
 
 ```bash
-git config user.name "NOME VISUALIZZATO"
+git config user.name "DISPLAY NAME"
 git config user.email "ID+LOGIN@users.noreply.github.com"
 ```
 
-## A4 — Progetto Vercel con il nome scelto
+## A4 — Vercel project with the chosen name
 
-**Lo faccio io (connettore Vercel):** individua il team personale (elenco team), poi crea il
-progetto collegato alla repo con `projectName` = `NOME` e repo `OWNER/NOME` (tool che crea un
-progetto da una repository Git). Se l'errore indica che Vercel non vede la repo: l'utente apre
-https://github.com/apps/vercel → Configure → aggiunge `NOME` → riprovi.
+**Done by Claude (Vercel connector):** find the personal team (list teams), then create the project
+linked to the repository with `projectName` = `NAME` and repo `OWNER/NAME` (the tool that creates a
+project from a Git repository). If the error says Vercel can't see the repository: the user opens
+https://github.com/apps/vercel → Configure → adds `NAME` → retry.
 
-**Lo faccio io (Vercel CLI, nella cartella clonata):**
+**Done by Claude (Vercel CLI, in the cloned folder):**
 
 ```bash
-vercel link --yes --project NOME
+vercel link --yes --project NAME
 vercel git connect
 ```
 
-**Passo passo (dashboard):** https://vercel.com/new → Import della repo → Project Name `NOME` → Deploy.
+**Step by step (dashboard):** https://vercel.com/new → import the repository → Project Name `NAME` → Deploy.
 
-Verifica: il progetto esiste ed è collegato a `OWNER/NOME`; leggi i domini del progetto. Se il dominio
-assegnato non è `NOME.vercel.app` (nome già preso), dillo e proponi: tenerlo, oppure aggiungere al
-progetto un altro `*.vercel.app` libero come dominio.
+Verification: the project exists and is linked to `OWNER/NAME`; read the project's domains. If the
+assigned domain isn't `NAME.vercel.app` (name already taken), say so and offer: keep it, or add
+another free `*.vercel.app` domain to the project.
 
-## A5 — Primo commit: configurazione, registro, rimozione del plugin
+## A5 — First commit: configuration, step log, plugin removal
 
-Nella nuova repo servono tre modifiche, in **un solo commit** su `main` (questo push avvia anche
-il primo deploy di produzione):
+The new repository needs three changes, in **a single commit** on `main` (this push also starts the
+first production deployment):
 
-1. `public/admin/config.yml` → `backend.repo: OWNER/NOME`.
-2. Rimuovere i file del plugin, che nella repo dell'artista non servono: la cartella `plugin/` e
+1. `public/admin/config.yml` → `backend.repo: OWNER/NAME`.
+2. Remove the plugin files, which the artist's repository doesn't need: the `plugin/` folder and
    `.claude-plugin/marketplace.json`.
-3. Creare `setup-progress.md` copiando `.claude/skills/setup/progress-template.md` e chiudendo
-   con `[x]` ed evidenza **solo** i passaggi verificati qui: 0.3, 0.4 (avviso Hobby confermato e
-   proprietario unico), 0.5 e 0.6 (strumenti verificati), 1.1, 1.2, 1.3, 3.1, 3.2, 3.3 (scrivi l'URL),
-   3.4 (dopo A6). Tutto il resto resta `[ ]`.
+3. Create `setup-progress.md` by copying `.claude/skills/setup/progress-template.md` and closing with
+   `[x]` plus evidence **only** the steps verified here: 0.3, 0.4 (Hobby notice confirmed and single
+   owner), 0.5 and 0.6 (tools verified), 1.1, 1.2, 1.3, 3.1, 3.2, 3.3 (write the URL), 3.4 (after A6).
+   Everything else stays `[ ]`. The file's labels are in Italian: keep them as they are.
 
-Come:
-- **Con la cartella clonata**: modifica i file, poi `git add -A`, `git commit -m "Avvio: configura repo, registro setup, rimuove plugin"` e `git push`.
-- **Senza clone** (es. Claude in chat o Cowork): con il connettore GitHub crea/aggiorna e cancella
-  i file direttamente su `main`. Se non è disponibile, lascia questi passaggi a `/setup` (resteranno
-  `[ ]` nel registro: 1.2 e 1.3 li esegue `/setup-repo`) e il primo deploy di produzione partirà al
-  primo push del setup.
+How:
+- **With the cloned folder**: edit the files, then `git add -A`, `git commit -m "Kickoff: configure repo, setup log, remove plugin"` and `git push`.
+- **Without a clone** (e.g. Claude in chat or Cowork): use the GitHub connector to create/update and
+  delete the files directly on `main`. If it isn't available, leave these steps to `/setup` (they
+  stay `[ ]` in the log: 1.2 and 1.3 are done by `/setup-repo`) and the first production deployment
+  will start at the setup's first push.
 
-## A6 — Sito online
+## A6 — Site online
 
-Attendi che il deploy di produzione sia **Ready** (connettore: elenco deployment del progetto; CLI:
-`vercel ls`). Verifica che `NOME.vercel.app` risponda 200 (richiesta HTTP HEAD, oppure strumento del
-connettore per leggere un URL Vercel, oppure l'utente lo apre). Il sito mostra ancora i contenuti di
-esempio: è normale, si sostituiscono nel setup. Aggiorna 3.4 nel registro (commit separato se serve).
+Wait until the production deployment is **Ready** (connector: the project's deployment list; CLI:
+`vercel ls`). Check that `NAME.vercel.app` answers 200 (HTTP HEAD request, or the connector's tool
+that reads a Vercel URL, or the user opens it). The site still shows the sample content: that's
+expected, it is replaced during the setup. Update 3.4 in the log (separate commit if needed).
 
-## A7 — Passaggio al setup completo
+## A7 — Handoff to the full setup
 
-Il resto (contenuti, CMS, form contatti, dominio) lo guida la skill `/setup` contenuta nella repo.
-Le skill di una repo si caricano solo in una sessione **aperta su quella repo**: questa sessione non
-le vede, quindi serve una nuova sessione. Dai all'utente le istruzioni per la strada scelta in A1:
+The rest (content, CMS, contact form, domain) is guided by the `/setup` skill inside the repository.
+A repository's skills only load in a session **opened on that repository**: this session can't see
+them, so a new session is needed. Give the user the instructions for the path chosen in A1:
 
-- **Sul computer:** apri la cartella `CARTELLA/NOME` in Claude Code — da terminale spostati nella
-  cartella e avvia Claude Code; dall'app desktop: scheda Code → nuova sessione → scegli la cartella —
-  poi scrivi `/setup`. Se la repo non è ancora sul computer, prima clonala come in A3.
-- **Nel cloud:** installa la Claude GitHub App sulla repo (https://github.com/apps/claude → Configure →
-  aggiungi `NOME`), apri https://claude.ai/code, avvia una sessione sulla repo `OWNER/NOME`, abilita il
-  connettore Vercel per la sessione e scrivi `/setup`. In cloud le immagini delle opere si caricano poi
-  dal CMS e i passaggi da browser (es. creare la GitHub OAuth App) li farai tu seguendo le istruzioni.
+- **On the computer:** open the folder `FOLDER/NAME` in Claude Code — from a terminal, move into the
+  folder and start Claude Code; from the desktop app: Code tab → new session → pick the folder —
+  then type `/setup`. If the repository isn't on the computer yet, clone it first as in A3.
+- **In the cloud:** install the Claude GitHub App on the repository (https://github.com/apps/claude →
+  Configure → add `NAME`), open https://claude.ai/code, start a session on `OWNER/NAME`, enable the
+  Vercel connector for the session and type `/setup`. In the cloud, artwork images are uploaded
+  later from the CMS and browser steps (e.g. creating the GitHub OAuth App) are done by the user
+  following the instructions.
 
-Chiudi con un riepilogo: URL della repo (privata), URL del sito, passaggi già registrati come fatti,
-prossima azione (`/setup`, che riprenderà dal passaggio 0.1/0.2 e poi dai contenuti, 2.1).
+End with a summary: repository URL (private), site URL, steps already logged as done, next action
+(`/setup`, which resumes from step 0.1/0.2 and then the content, 2.1).

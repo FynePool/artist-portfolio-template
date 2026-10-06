@@ -51,6 +51,10 @@ if (!originRepo) {
 } else {
   add('ok', 'Repository', `origin → ${originRepo}`)
 }
+const pluginLeftovers = ['plugin', '.claude-plugin'].filter((rel) => fs.existsSync(path.join(ROOT, rel)))
+if (pluginLeftovers.length > 0) {
+  add('todo', 'Repository', `File del plugin del template ancora presenti: ${pluginLeftovers.join(', ')} (passaggio 1.3).`, '/setup-repo')
+}
 
 // ── Identità e contenuti ────────────────────────────────────────────────────
 const general = readJson('data/general.json') ?? {}
@@ -139,6 +143,8 @@ if (/^NEXT_PUBLIC_WEB3FORMS_KEY=\S+/m.test(envLocal)) {
 
 // ── Produzione (controlli remoti) ───────────────────────────────────────────
 const OFFLINE = process.argv.includes('--offline')
+// Sessione cloud di Claude Code: la rete è limitata ad allowlist (*.vercel.app di norma escluso)
+const CLOUD_SESSION = process.env.CLAUDE_CODE_REMOTE === 'true'
 const site = cmsBaseUrl && !cmsBaseUrl.includes('YOUR-SITE') ? cmsBaseUrl.replace(/\/+$/, '') : null
 
 async function get(url) {
@@ -151,12 +157,12 @@ async function get(url) {
   }
 }
 
-if (!site) {
-  add('info', 'Produzione', 'Controlli remoti non eseguiti: URL di produzione non ancora in config.yml (base_url).', '/setup-vercel')
-} else if (OFFLINE) {
-  add('info', 'Produzione', 'Controlli remoti saltati (--offline).')
-} else {
+async function checkProduction() {
   const home = await get(`${site}/`)
+  if (CLOUD_SESSION && (!home || home.status === 403)) {
+    add('info', 'Produzione', `Sessione cloud: ${site} non raggiungibile dalla rete della sessione, controlli remoti non verificabili da qui. Verificali con il connettore Vercel (lettura di URL Vercel) o aggiungi il dominio alla rete dell'ambiente cloud.`, '/setup')
+    return
+  }
   if (!home) {
     add('todo', 'Produzione', `${site} non raggiungibile.`, '/setup-vercel')
   } else if (home.status !== 200) {
@@ -202,6 +208,14 @@ if (!site) {
     add('todo', 'Produzione', `/api/auth risposta inattesa (${auth ? auth.status : 'nessuna risposta'}).`, '/setup-cms')
   }
   add('info', 'Produzione', 'Non verificabili da qui: callback della GitHub OAuth App, login reale a /admin, ricezione email del form.')
+}
+
+if (!site) {
+  add('info', 'Produzione', 'Controlli remoti non eseguiti: URL di produzione non ancora in config.yml (base_url).', '/setup-vercel')
+} else if (OFFLINE) {
+  add('info', 'Produzione', 'Controlli remoti saltati (--offline).')
+} else {
+  await checkProduction()
 }
 
 // ── Registro passaggi (setup-progress.md) ───────────────────────────────────

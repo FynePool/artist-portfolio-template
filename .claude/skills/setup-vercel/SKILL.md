@@ -16,14 +16,15 @@ L'URL canonico (`lib/site.ts`) si ricava in automatico da `VERCEL_PROJECT_PRODUC
 Il collegamento Git è essenziale: ogni pubblicazione dal CMS è un commit su `main`, e solo con
 il deploy automatico su push il sito si aggiorna da solo.
 
-### Lo faccio io — connettore Vercel (MCP), se disponibile
+### Lo faccio io — connettore Vercel (MCP), se disponibile — l'unica strada in cloud
 
 Cerca i tool con ToolSearch (`vercel create project`, `vercel project env`). Individua il team
-corretto (lista team/progetti; se più di uno, chiedi), poi crea il progetto Next.js collegato alla
-repo GitHub `OWNER/NOME`. Se il connettore segnala un'azione richiesta all'utente (es. installare
+corretto (lista team/progetti; su Hobby è il team personale), poi crea il progetto collegato alla
+repo GitHub `OWNER/NOME` (tool che crea un progetto da una repository Git, `projectName` = nome scelto:
+determina l'indirizzo `NOME.vercel.app`). Se il connettore segnala un'azione richiesta all'utente (es. installare
 l'app GitHub di Vercel sulla repo), mostra il link e attendi.
 
-### Lo faccio io — Vercel CLI
+### Lo faccio io — Vercel CLI (solo sul computer: in cloud vercel.com non è raggiungibile)
 
 ```bash
 vercel --version          # se molto vecchia: npm i -g vercel@latest (con conferma)
@@ -49,6 +50,12 @@ Controlla l'esito (connettore: lista deployment; CLI: `vercel ls`, `vercel inspe
 Se il build fallisce: leggi i log del build, riproduci con `npm run build` in locale, correggi,
 pusha. Non cambiare impostazioni del progetto prima di aver letto i log.
 
+Se il deploy risulta **bloccato** con un messaggio sull'autore del commit ("commit author did not
+have contributing access… Hobby Plan does not support collaboration for private repositories"):
+l'autore dell'ultimo commit non è il proprietario dell'account Vercel. Correggi l'identità git
+(vedi `/setup-repo`, "Autore dei commit") e fai un nuovo commit; se a pubblicare deve essere davvero
+un'altra persona, servono Pro o repo pubblica (vincoli in `/setup`, fase 0).
+
 ## 3.3 URL di produzione — AUTO
 
 Ricava il dominio di produzione del progetto (`NOME.vercel.app` o simile: connettore → dettagli
@@ -58,7 +65,8 @@ Usa il dominio di progetto, non l'URL del singolo deployment (quello con hash, p
 
 ## 3.4 Sito online — AUTO
 
-Apri l'URL (browser integrato, oppure `curl -sI`): homepage, una pagina `/gallerie/...`,
+Apri l'URL (browser integrato, `curl -sI`, o in cloud lo strumento del connettore Vercel che legge
+un URL): homepage, una pagina `/gallerie/...`,
 `/exhibitions`, `/sitemap.xml` (gli URL devono usare il dominio di produzione, non localhost).
 `check-setup` farà questi controlli in automatico dopo il passaggio 4.1, quando l'URL sarà in `config.yml`.
 

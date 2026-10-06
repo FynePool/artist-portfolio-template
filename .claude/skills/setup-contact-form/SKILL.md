@@ -24,7 +24,7 @@ Se sì, chiedi a quale email devono arrivare i messaggi (se non già raccolta al
 
 ## 5.2 Richiesta access key — MISTO
 
-- **Lo faccio io (browser)**: con Claude in Chrome o il browser integrato apri https://web3forms.com,
+- **Lo faccio io (browser, solo sul computer)**: con Claude in Chrome o il browser integrato apri https://web3forms.com,
   sezione "Create your Access Key", e compila l'email. È un invio di dati personali a un servizio
   esterno: **chiedi conferma esplicita** indicando l'email che userai, poi invia.
 - **Passo passo**: l'utente apre https://web3forms.com → "Create your Access Key" → inserisce
@@ -52,8 +52,9 @@ Se sì, chiedi a quale email devono arrivare i messaggi (se non già raccolta al
 - **Passo passo (dashboard)**: Vercel → progetto → Settings → Environment Variables → Add →
   nome, valore, spunta i tre ambienti → Save.
 
-In locale: `vercel env pull .env.local` (non scrivere `.env.local` con Edit/Write: è protetto
+Sul computer: `vercel env pull .env.local` (non scrivere `.env.local` con Edit/Write: è protetto
 dall'hook del progetto). Senza CLI collegata, l'utente può creare `.env.local` da `.env.example`.
+In cloud `.env.local` non serve: chiudi quella parte con `✔ non necessario in cloud`.
 
 ## 5.5 Nuovo deploy e verifica — AUTO
 

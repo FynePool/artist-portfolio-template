@@ -20,6 +20,9 @@ Rispondi nella lingua dell'utente (default: italiano). Un passaggio alla volta, 
   - se `setup-progress.md` **non esiste** nella root del progetto, copialo da `progress-template.md`;
   - se **esiste**, leggilo e riprendi dal **primo** passaggio non chiuso (`[ ]`). Non fidarti
     ciecamente dei `[x]` di sessioni precedenti: `check-setup` deve confermarli (vedi sotto).
+  - Se la repo è stata creata con il plugin `artist-portfolio` (`/artist-portfolio:setup`), il registro
+    arriva già con alcuni passaggi chiusi (requisiti, repo, progetto Vercel, URL): confermali con
+    `check-setup` e prosegui.
 - Il registro si aggiorna **subito dopo ogni passaggio**, non a fine fase.
 
 ## Protocollo anti-salto (obbligatorio)
@@ -66,12 +69,28 @@ fase, per non perdere il filo nelle conversazioni lunghe.
 
 ## Fase 0 — Prerequisiti (passaggi 0.1–0.7)
 
+### Dove gira la sessione
+
+Controlla `echo "$CLAUDE_CODE_REMOTE"`: `true` = **sessione cloud** (claude.ai/code), altrimenti
+sessione sul computer dell'utente. In cloud valgono queste differenze, da applicare in tutte le fasi:
+
+| In cloud | Conseguenza |
+|---|---|
+| La repo è già quella della sessione | 1.1 si verifica e basta; creare altre repo non è possibile |
+| Rete limitata (registri npm e GitHub sì, vercel.com no) | niente Vercel CLI: usa il **connettore Vercel** (va abilitato sulla sessione); `check-setup` segna i controlli remoti come "non verificabili" e li fai con il connettore (strumento che legge un URL Vercel) |
+| Nessun browser per Claude | 4.2, 5.2, 6.6 li fa l'utente seguendo le istruzioni |
+| Nessun accesso ai file del computer dell'utente | le immagini delle opere si caricano dal CMS a fine setup, o l'utente le carica nella repo da GitHub (Add file → Upload files) |
+| Nessuna anteprima locale | per 2.9 usa il deploy di anteprima Vercel di un branch (visibile all'utente loggato su Vercel) |
+| `.env.local` inutile | i passaggi che lo popolano si chiudono con `✔ non necessario in cloud` |
+
+### Strumenti
+
 Verifica gli strumenti e riassumi all'utente cosa potrai fare tu e cosa farà lui:
 
 | Strumento | Come verificarlo | Abilita |
 |---|---|---|
-| GitHub CLI | `gh auth status` | 1.1 creare la repo, 4.9 invitare collaboratori |
-| Vercel CLI | `vercel --version` e `vercel whoami` (versione vecchia → proponi `npm i -g vercel@latest`) | fase 3, env, domini |
+| GitHub CLI | `gh auth status` (in cloud è già autenticata sulla repo della sessione) | 1.1 creare la repo, 4.9 invitare collaboratori |
+| Vercel CLI | `vercel --version` e `vercel whoami` (versione vecchia → proponi `npm i -g vercel@latest`); non in cloud | fase 3, env, domini |
 | Connettore Vercel (MCP) | ToolSearch `vercel project env` | fase 3, env, domini senza CLI |
 | Browser (Claude in Chrome o browser integrato) | tool `mcp__claude-in-chrome__*` / `mcp__Claude_Browser__*` | 4.2, 5.2, 6.6 (solo campi non segreti) |
 | Connettore Gmail | ToolSearch `gmail search` | 5.3 recuperare la chiave Web3Forms, 5.6 verificare la ricezione |
@@ -80,20 +99,33 @@ Se manca uno strumento utile, dillo e indica come aggiungerlo (login CLI eseguit
 impostazioni connettori di claude.ai, `/mcp`), proponendo comunque la strada manuale.
 I login (`gh auth login`, `vercel login`) li esegue l'utente nel proprio terminale.
 
+### Vincoli del piano Vercel Hobby (0.4)
+
+Spiegali e fatti confermare esplicitamente; la scelta del piano è dell'utente:
+- **Solo uso non commerciale**: il sito può essere una vetrina delle opere; pubblicizzarne o gestirne
+  la vendita richiede il piano Pro (https://vercel.com/docs/limits/fair-use-guidelines#commercial-usage).
+  Il form contatti ha l'oggetto "Acquisto opera": su Hobby l'utente può volerlo togliere (in 2.3).
+- **Un solo account che modifica il sito**: con repo privata, Vercel Hobby pubblica solo i commit
+  del proprietario dell'account. GitHub, Vercel e login al CMS devono essere della stessa persona;
+  se a gestire i contenuti è un altro account GitHub servono Pro o repo pubblica (impatta 4.9).
+- **Repo in un account personale**, non in un'organizzazione (Hobby non pubblica repo private di organizzazioni).
+
+### Domande (0.7)
+
 Per 0.7 chiedi **in un solo messaggio**: nome dell'artista (e titolo del sito se diverso); nome,
-proprietario e visibilità della repo (privata consigliata); sezioni del portfolio (es. "Pittura,
-Disegno, Fotografia"); email che deve ricevere i messaggi del form; username GitHub di chi gestirà
-i contenuti; dominio personalizzato sì/no. Le risposte mancanti restano domande aperte da
+proprietario e visibilità della repo (privata consigliata, in un account personale); sezioni del
+portfolio (es. "Pittura, Disegno, Fotografia"); email che deve ricevere i messaggi del form;
+chi gestirà i contenuti (il proprietario stesso, consigliato su Hobby); dominio personalizzato sì/no. Le risposte mancanti restano domande aperte da
 riproporre al passaggio che le richiede.
 
 Criteri di completamento della fase 0:
 
 | Passaggio | Chiudi con `[x]` solo se |
 |---|---|
-| 0.1 | sei nella cartella del progetto (`package.json` con `"name": "artist-portfolio-template"` o derivato, `.claude/skills/setup` presente) |
+| 0.1 | la sessione è aperta sulla repo del portfolio (`package.json` del template e `.claude/skills/setup` presenti), sul computer o in cloud |
 | 0.2 | `npm install` terminato senza errori (`node_modules` presente) |
-| 0.3 | l'utente conferma di avere un account GitHub; username del gestore contenuti noto (o "sono io") |
-| 0.4 | l'utente conferma di avere un account Vercel (piano Hobby gratuito va bene) |
+| 0.3 | username GitHub del proprietario verificato (`gh api user --jq .login` o conferma); è un account personale |
+| 0.4 | account Vercel collegato a quello stesso GitHub (conferma dell'utente); vincoli Hobby spiegati e confermati, oppure piano Pro |
 | 0.5 | `gh auth status` ok, **oppure** l'utente sceglie esplicitamente la strada manuale per repo e inviti |
 | 0.6 | `vercel whoami` ok o connettore Vercel risponde, **oppure** l'utente sceglie esplicitamente la dashboard |
 | 0.7 | tutte le 6 domande hanno una risposta (anche "decido dopo" per form e dominio: verranno richieste in 5.1 / 6.1) |
@@ -102,7 +134,7 @@ Criteri di completamento della fase 0:
 
 | Fase | Passaggi | Skill | Prerequisiti |
 |---|---|---|---|
-| 1. Repository | 1.1–1.2 | `/setup-repo` | fase 0 |
+| 1. Repository | 1.1–1.3 | `/setup-repo` | fase 0 |
 | 2. Contenuti | 2.1–2.9 | `/setup-content` | 0.2 |
 | 3. Deploy Vercel | 3.1–3.4 | `/setup-vercel` | 1.2 (repo su GitHub) |
 | 4. CMS | 4.1–4.10 | `/setup-cms` | 3.3 (URL di produzione) |

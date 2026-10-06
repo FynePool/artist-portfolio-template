@@ -10,6 +10,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Template setup
 
+Two entry points:
+
+- **Plugin `artist-portfolio`** ([plugin/](plugin/), listed by [.claude-plugin/marketplace.json](.claude-plugin/marketplace.json), so this repo is also a plugin marketplace): `/artist-portfolio:setup` bootstraps from nothing — prerequisites (incl. Vercel Hobby constraints), private repo from template (`gh repo create --template` or the "Use this template" link), Vercel project named by the user (connector or CLI), first commit, then hands off to the repo's `/setup` in a new session (repo skills only load in a session opened on the repo). Plugins don't load in cloud sessions; repo skills do. Bump `version` in [plugin/.claude-plugin/plugin.json](plugin/.claude-plugin/plugin.json) on every plugin change (it pins installs). Validate with `claude plugin validate .` and `claude plugin validate ./plugin`.
+- **Repo skills** (below), usable locally or in a cloud session (`CLAUDE_CODE_REMOTE=true`: no Vercel CLI, no browser, no local files — use connectors).
+
+Derived repos must not keep `plugin/` and `.claude-plugin/`: step 1.3 (`/setup-repo`) removes them and `check-setup` flags them.
+
+Vercel Hobby constraints enforced by the setup: non-commercial use (showcase only), commits from the Vercel owner only on private repos (CMS editor = owner, git author = owner's GitHub noreply email), personal-account repos only.
+
+
 A new project created from this template is configured through project skills in [.claude/skills/](.claude/skills/):
 
 - `/setup` — orchestrator: inventories available tools (gh, Vercel CLI/connector, browser, Gmail), runs `npm run check-setup`, then runs the phases below in dependency order.

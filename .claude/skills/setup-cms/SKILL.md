@@ -36,8 +36,8 @@ GitHub non permette di creare OAuth App via API: è un passaggio da interfaccia 
 | Authorization callback URL | `SITE/api/auth` |
 | Enable Device Flow | spento |
 
-- **Lo faccio io (browser)**: con Claude in Chrome o il browser integrato apri la pagina (il login
-  a GitHub lo fa l'utente) e compila questi campi, che non sono segreti. **Register application**
+- **Lo faccio io (browser, solo sul computer)**: con Claude in Chrome o il browser integrato apri la
+  pagina (il login a GitHub lo fa l'utente) e compila questi campi, che non sono segreti. **Register application**
   lo clicca l'utente, o tu solo dopo sua conferma esplicita.
 - **Passo passo**: dai all'utente la tabella sopra e attendi conferma.
 
@@ -51,7 +51,7 @@ tu in nessun campo, non scriverlo nel registro.
 
 Il Client ID è visibile nella pagina dell'app e non è segreto: leggilo dal browser o fattelo copiare.
 - Connettore Vercel: crea la variabile sul progetto, target Production.
-- CLI: `printf '%s' "CLIENT_ID" | vercel env add OAUTH_CLIENT_ID production`
+- CLI (solo sul computer): `printf '%s' "CLIENT_ID" | vercel env add OAUTH_CLIENT_ID production`
 
 ## 4.5 `OAUTH_CLIENT_SECRET` su Vercel — MANUALE (sempre)
 
@@ -96,8 +96,14 @@ collezioni (Generali, Gallerie — Opere, Esposizioni…). Chiedigli conferma.
 
 ## 4.9 Accesso per chi gestisce i contenuti — AUTO (con conferma)
 
-Chiedi chi gestirà i contenuti. Se è l'utente stesso (già proprietario della repo): chiudi con
-`✔ gestore = proprietario`. Altrimenti serve un account GitHub (gratuito) con permesso **Write**:
+Chiedi chi gestirà i contenuti. Se è il proprietario stesso (consigliato): chiudi con
+`✔ gestore = proprietario`.
+
+Se è **un'altra persona** con un altro account GitHub, prima verifica il piano: con Vercel **Hobby**
+e repo **privata** le sue pubblicazioni dal CMS verrebbero bloccate (Vercel pubblica solo i commit del
+proprietario). Spiega le alternative e fai scegliere l'utente: passare a Pro, rendere pubblica la repo,
+oppure far gestire i contenuti al proprietario. Solo dopo la scelta, serve un account GitHub (gratuito)
+con permesso **Write**:
 
 - **Lo faccio io (GitHub CLI)**, previa conferma (GitHub invia un invito via email):
   ```bash

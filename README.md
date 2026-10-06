@@ -21,26 +21,43 @@ Contenuti di esempio inclusi (testi lorem ipsum, immagini stock, gallerie `secti
 
 ---
 
-## Avvio rapido (con Claude Code)
+## Avvio rapido (con Claude)
 
-1. Crea la tua repo da questo template: pulsante **Use this template** → **Create a new repository** (privata consigliata).
-2. Clona la nuova repo e installa le dipendenze:
-   ```bash
-   git clone https://github.com/TUO-ACCOUNT/TUA-REPO.git
-   cd TUA-REPO
-   npm install
-   ```
-3. Apri la cartella in [Claude Code](https://claude.com/claude-code) ed esegui:
-   ```
-   /setup
-   ```
+### Opzione A — plugin `artist-portfolio` (consigliata)
+
+Il plugin crea tutto partendo da zero: verifica i requisiti, crea la tua repo **privata** dal template, crea il progetto Vercel con il nome che scegli (`nome.vercel.app`) e mette il sito online. Poi ti indica come proseguire con `/setup` dentro la repo.
+
+In [Claude Code](https://claude.com/claude-code) (terminale o app desktop):
+
+```
+/plugin marketplace add FynePool/artist-portfolio-template
+/plugin install artist-portfolio@artist-portfolio-template
+/artist-portfolio:setup
+```
+
+In alternativa aggiungi la repo come marketplace da claude.ai (**Customize → Plugins**): il plugin funziona anche in chat e in Cowork e si sincronizza in Claude Code. Il setup completo, dopo l'avvio, richiede comunque Claude Code (sul computer o nel cloud).
+
+### Opzione B — template manuale
+
+1. Pulsante **Use this template** → **Create a new repository** → **Private**, nel tuo account personale.
+2. Apri la nuova repo in Claude Code ed esegui `/setup`:
+   - **sul computer**: `git clone https://github.com/TUO-ACCOUNT/TUA-REPO.git`, poi apri la cartella in Claude Code;
+   - **nel cloud**: installa la [Claude GitHub App](https://github.com/apps/claude) sulla repo e avvia una sessione su [claude.ai/code](https://claude.ai/code) (piani Pro, Max o Team). In cloud Claude usa il connettore Vercel al posto della CLI; le immagini delle opere si caricano dal CMS e i passaggi da browser li fai tu.
+
+### Prima di iniziare: piano Vercel Hobby
+
+Il piano gratuito Hobby va bene per un portfolio, con tre vincoli che il setup ti farà confermare:
+
+- **Uso non commerciale**: il sito può essere una vetrina delle opere; per pubblicizzarne o gestirne la vendita (prezzi, "acquista", pagamenti) Vercel richiede il piano Pro ([linee guida](https://vercel.com/docs/limits/fair-use-guidelines#commercial-usage)). La scelta è tua.
+- **Un solo account che modifica il sito**: con una repo privata, Vercel Hobby pubblica solo le modifiche del proprietario dell'account. GitHub, Vercel e login al CMS devono essere della stessa persona; se i contenuti li gestisce un altro account servono il piano Pro o una repo pubblica.
+- **Repo in un account personale**: Hobby non pubblica repo private di organizzazioni GitHub.
 
 La skill `/setup` controlla quali strumenti hai a disposizione (GitHub CLI, Vercel CLI o connettore Vercel, browser, connettore Gmail) e ti porta attraverso **tutti** i passaggi, nell'ordine, tenendo un registro in `setup-progress.md`: un passaggio viene segnato come fatto solo dopo una verifica, e quelli opzionali si saltano solo con un tuo "no" esplicito. Se interrompi, alla volta successiva `/setup` riprende dal primo passaggio aperto. Le azioni esterne (creare repo, deploy, variabili, inviti, invio di form) partono solo dopo la tua conferma.
 
 | Fase | Skill | Contenuto |
 |---|---|---|
 | 0. Prerequisiti | `/setup` | Account, strumenti, raccolta informazioni |
-| 1. Repository | `/setup-repo` | Repo GitHub propria, `backend.repo` del CMS |
+| 1. Repository | `/setup-repo` | Repo GitHub privata, `backend.repo` del CMS, rimozione dei file del plugin |
 | 2. Contenuti | `/setup-content` | Nome, bio, sezioni (al posto di `section1..N`), opere, esempi, hero, icone, colori |
 | 3. Deploy | `/setup-vercel` | Progetto Vercel collegato a GitHub, primo deploy, URL di produzione |
 | 4. CMS | `/setup-cms` | GitHub OAuth App, variabili OAuth, login a `/admin`, accesso per chi gestisce i contenuti |
@@ -58,15 +75,16 @@ La skill `/setup` controlla quali strumenti hai a disposizione (GitHub CLI, Verc
 
 | # | Passaggio | Chi |
 |---|---|---|
-| 0.1 | Codice del template in locale, aperto in Claude Code | Manuale |
+| 0.1 | Repo aperta in una sessione Claude Code (computer o cloud) | Manuale |
 | 0.2 | `npm install` | Auto |
-| 0.3 | Account GitHub (tuo e di chi gestirà i contenuti) | Manuale |
-| 0.4 | Account Vercel | Manuale |
+| 0.3 | Account GitHub personale del proprietario (lo stesso del CMS) | Manuale |
+| 0.4 | Account Vercel collegato allo stesso GitHub; vincoli Hobby confermati | Manuale |
 | 0.5 | Login GitHub CLI (`gh auth login`) o scelta della strada manuale | Manuale |
 | 0.6 | Vercel CLI aggiornata (Auto) e login `vercel login` o autorizzazione connettore (Manuale) | Misto |
 | 0.7 | Risposte alle domande iniziali (nome, sezioni, email, gestore, dominio) | Manuale |
 | 1.1 | Creazione repo GitHub propria | Auto (Manuale se manca la GitHub CLI) |
 | 1.2 | `backend.repo` nel CMS, commit e push | Auto |
+| 1.3 | Rimozione dei file del plugin dalla repo | Auto |
 | 2.1 | Identità: nome, titolo, descrizione, tema | Auto (testi forniti da te) |
 | 2.2 | Hero: nome, sottotitolo, immagini | Auto (immagini fornite da te) |
 | 2.3 | Biografia, email, social | Auto (testi forniti da te) |
@@ -88,7 +106,7 @@ La skill `/setup` controlla quali strumenti hai a disposizione (GitHub CLI, Verc
 | 4.6 | Commit, push, nuovo deploy | Auto |
 | 4.7 | Verifica tecnica `/api/auth` e `config.yml` pubblicato | Auto |
 | 4.8 | Primo login a `/admin` | Manuale |
-| 4.9 | Invito di chi gestisce i contenuti come collaboratore | Auto |
+| 4.9 | Accesso per chi gestisce i contenuti (il proprietario stesso, o un collaboratore solo con Pro o repo pubblica) | Auto |
 | 4.10 | Accettazione invito e primo login del gestore | Manuale (il gestore) |
 | 5.1 | Decisione: form sì/no | Manuale |
 | 5.2 | Richiesta access key Web3Forms | Misto (Claude compila il form nel browser con conferma) |
@@ -124,7 +142,7 @@ Stato del setup in qualunque momento:
 npm run check-setup
 ```
 
-1. **Repo** — crea la repo da "Use this template", clonala, `npm install`. In `public/admin/config.yml` imposta `backend.repo: TUO-ACCOUNT/TUA-REPO`.
+1. **Repo** — crea la repo privata da "Use this template" nel tuo account personale, clonala, `npm install`. In `public/admin/config.yml` imposta `backend.repo: TUO-ACCOUNT/TUA-REPO` ed elimina `plugin/` e `.claude-plugin/` (servono solo a distribuire il plugin). Fai i commit con il tuo account GitHub (vedi i vincoli Hobby sopra).
 2. **Contenuti** — modifica `data/general.json` (`siteTitle`, `artistName`, `description`, `defaultTheme`), `data/bio.json` (bio, email, social), `data/homepage.json` (hero, sezioni). Rinomina le cartelle `public/assets/galleries/section1..3` con il nome delle tue sezioni (solo `a-z`, `0-9`, `-`) e aggiorna `nome` e i percorsi `file` nei due JSON di ogni galleria. Sostituisci immagini hero, opere, esposizioni, `app/icon.svg` e `public/admin/logo.svg` (rimuovi il commento `template-default-icon`). Tutti i contenuti si possono anche cambiare dopo dal CMS.
 3. **Vercel** — su [vercel.com/new](https://vercel.com/new) importa la repo e fai Deploy (zero configurazione). Annota l'URL di produzione (es. `https://nome.vercel.app`).
 4. **CMS**
@@ -382,6 +400,8 @@ scripts/
   generate-thumbs.mjs         # miniature e blur placeholder (prebuild)
   check-setup.mjs             # stato del setup del template
 .claude/skills/               # skill di setup per Claude Code (/setup e fasi)
+.claude-plugin/marketplace.json # marketplace del plugin (rimosso nelle repo degli artisti)
+plugin/                       # plugin artist-portfolio: skill di avvio /artist-portfolio:setup (rimosso nelle repo degli artisti)
 ```
 
 </details>

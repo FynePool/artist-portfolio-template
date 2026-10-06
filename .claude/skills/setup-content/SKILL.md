@@ -34,6 +34,11 @@ file .ics), `description` (SEO, 1-2 frasi), `defaultTheme` (`dark` / `light`: ch
 `aboutSections` (biografia / mostre / premi on-off). Anche `exhibitionsCta` in `data/homepage.json`
 (titolo, descrizione, testo bottone del banner Esposizioni).
 
+Form contatti su piano Hobby (uso non commerciale, vedi `/setup` fase 0): chiedi se tenere
+l'oggetto "Acquisto opera" in `components/Contact.tsx` (select `subject` e precompilazione in
+`components/Contact.tsx` / `lib/contactPrefill.ts`) o sostituirlo con una voce neutra
+(es. "Informazioni su un'opera"). Decide l'utente.
+
 Social diversi da Instagram/Facebook richiedono codice: `components/About.tsx` (icona + voce
 in `socialLinks`) e `public/admin/config.yml` (campo in "Bio e contatti").
 
@@ -53,6 +58,10 @@ Il template ha `section1`, `section2`, `section3`. Per ogni sezione dell'artista
 La navigazione si aggiorna da sola (`components/Nav.tsx` legge le gallerie pubbliche).
 
 ## 2.5 Opere
+
+In una **sessione cloud** non puoi leggere i file del computer dell'utente: o le carica lui nella
+repo da GitHub (pagina della cartella → Add file → Upload files) e tu le sistemi, o si caricano dal
+CMS a fine setup (registra la decisione). Vale anche per le immagini di 2.2 e 2.7.
 
 - Se l'utente fornisce immagini: copiale nella galleria con nomi `NN_titolo-kebab.jpg` e scrivi
   le voci in `gallery.json` (`file` = `/assets/galleries/{slug}/{nome}`, `alt` obbligatorio,
@@ -102,9 +111,13 @@ npm run check-setup -- --offline
 npm run lint && npm run build
 ```
 
-Avvia `npm run dev` e mostra all'utente homepage, una pagina `/gallerie/...` e `/exhibitions`
-(browser integrato o chiedigli di aprire http://localhost:3000). Serve la sua **approvazione
-esplicita**. Poi commit (`git commit -m "Contenuti iniziali"`) e, previa conferma, push.
+Sul computer: avvia `npm run dev` e mostra all'utente homepage, una pagina `/gallerie/...` e
+`/exhibitions` (browser integrato o chiedigli di aprire http://localhost:3000).
+In cloud: pusha su un branch (es. `contenuti-iniziali`), recupera l'URL del deploy di anteprima con il
+connettore Vercel e fallo aprire all'utente (è loggato su Vercel, quindi lo vede); poi unisci su `main`.
+
+Serve la sua **approvazione esplicita**. Poi commit (`git commit -m "Contenuti iniziali"`) e, previa
+conferma, push su `main`.
 
 ## Criteri di completamento
 

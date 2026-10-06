@@ -6,10 +6,10 @@ Stato: `[ ]` da fare · `[x]` fatto **e verificato** (con evidenza dopo `✔`) �
 Esecutore: **AUTO** = lo fa Claude · **MANUALE** = lo fa l'utente · **MISTO** = Claude prepara/verifica, l'utente completa.
 
 ## 0. Prerequisiti
-- [ ] 0.1 Codice del template in locale, aperto in Claude Code — MANUALE
+- [ ] 0.1 Repo del portfolio aperta in una sessione Claude Code (sul computer o nel cloud) — MANUALE
 - [ ] 0.2 Dipendenze installate (`npm install`) — AUTO
-- [ ] 0.3 Account GitHub di chi pubblica il sito (e di chi gestirà i contenuti, se diverso) — MANUALE
-- [ ] 0.4 Account Vercel — MANUALE
+- [ ] 0.3 Account GitHub personale del proprietario del sito (lo stesso con cui si userà il CMS) — MANUALE
+- [ ] 0.4 Account Vercel collegato allo stesso GitHub; avviso piano Hobby confermato (vetrina sì, vendita → Pro; un solo account che modifica i contenuti) — MANUALE
 - [ ] 0.5 GitHub CLI autenticata (`gh auth login`), oppure scelta esplicita della strada manuale — MANUALE
 - [ ] 0.6 Vercel: CLI aggiornata e autenticata (`vercel login`) o connettore Vercel autorizzato o scelta della dashboard — MISTO
 - [ ] 0.7 Informazioni raccolte: nome artista, sezioni, email del form, gestore contenuti, dominio — MANUALE
@@ -17,6 +17,7 @@ Esecutore: **AUTO** = lo fa Claude · **MANUALE** = lo fa l'utente · **MISTO** 
 ## 1. Repository GitHub
 - [ ] 1.1 Repo propria come `origin` (creata se serve) — AUTO
 - [ ] 1.2 `backend.repo` in `public/admin/config.yml`, commit e push — AUTO
+- [ ] 1.3 File del plugin rimossi dalla repo (`plugin/`, `.claude-plugin/`) — AUTO
 
 ## 2. Contenuti
 - [ ] 2.1 Identità: nome artista, titolo, descrizione, tema (`data/general.json`) — AUTO
@@ -44,7 +45,7 @@ Esecutore: **AUTO** = lo fa Claude · **MANUALE** = lo fa l'utente · **MISTO** 
 - [ ] 4.6 Commit, push e nuovo deploy — AUTO
 - [ ] 4.7 `/api/auth` reindirizza a GitHub e `config.yml` pubblicato aggiornato (`check-setup`) — AUTO
 - [ ] 4.8 Login a `/admin` riuscito — MANUALE
-- [ ] 4.9 Gestore contenuti invitato come collaboratore Write (oppure: è l'utente stesso) — AUTO
+- [ ] 4.9 Accesso per chi gestisce i contenuti: è il proprietario stesso, oppure collaboratore Write (richiede Pro o repo pubblica) — AUTO
 - [ ] 4.10 Invito accettato e primo login del gestore contenuti — MANUALE
 
 ## 5. Form contatti (opzionale)

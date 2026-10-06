@@ -1,0 +1,24 @@
+{
+  "type": "opere",
+  "nome": "section3",
+  "items": [
+    {
+      "file": "/assets/galleries/section3/01_ut-labore.jpg",
+      "alt": "Ut labore",
+      "medium": "Tecnica E",
+      "featured": true
+    },
+    {
+      "file": "/assets/galleries/section3/02_dolore-magna.jpg",
+      "alt": "Dolore magna",
+      "medium": "Tecnica E",
+      "featured": false
+    },
+    {
+      "file": "/assets/galleries/section3/03_aliqua-enim.jpg",
+      "alt": "Aliqua enim",
+      "medium": "Tecnica E",
+      "featured": false
+    }
+  ]
+}

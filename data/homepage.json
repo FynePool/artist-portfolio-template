@@ -1,0 +1,34 @@
+{
+  "hero": {
+    "name": "Nome Artista",
+    "subtitle": "Lorem ipsum dolor sit amet",
+    "desktop": [
+      "/assets/hero/desktop/01_hero.jpg",
+      "/assets/hero/desktop/02_hero.jpg"
+    ],
+    "mobile": [
+      "/assets/hero/mobile/01_hero.jpg"
+    ]
+  },
+  "sectionVisibility": {
+    "articles": true,
+    "galleries": true,
+    "about": true,
+    "exhibitions-cta": true,
+    "contact": true,
+    "featured": true
+  },
+  "sectionOrder": [
+    "featured",
+    "galleries",
+    "articles",
+    "about",
+    "exhibitions-cta",
+    "contact"
+  ],
+  "exhibitionsCta": {
+    "title": "Esposizioni",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    "buttonLabel": "Scopri tutte"
+  }
+}

@@ -1,0 +1,379 @@
+# SETUP — valori da personalizzare (skill /setup-cms o README "Setup manuale"):
+#   backend.repo      → "owner/nome-repo" della TUA repository GitHub
+#   backend.base_url  → URL di produzione del sito (senza / finale)
+#   site_url          → stesso URL di produzione
+# Finché restano i placeholder OWNER/REPO e YOUR-SITE, il login a /admin non funziona.
+backend:
+  name: github
+  repo: OWNER/REPO
+  branch: main
+  base_url: https://YOUR-SITE.vercel.app
+  auth_endpoint: /api/auth
+  commit_messages:
+    create: "CMS: crea {{collection}}/{{slug}}"
+    update: "CMS: aggiorna {{path}}"
+    delete: "CMS: elimina {{collection}}/{{slug}}"
+    uploadMedia: "CMS: carica {{path}}"
+    deleteMedia: "CMS: elimina media {{path}}"
+
+publish_mode: editorial_workflow
+
+site_url: https://YOUR-SITE.vercel.app
+
+logo:
+  src: /admin/logo.svg
+  show_in_header: true
+
+locale: it
+
+media_folder: public/assets/uploads
+public_folder: /assets/uploads
+
+collections:
+
+  # ── Sito ──────────────────────────────────────────────────────────────────
+  - name: site
+    label: Generali
+    files:
+
+      - name: general
+        label: Impostazioni generali
+        file: data/general.json
+        extension: json
+        format: json
+        editor:
+          preview: false
+        fields:
+          - { name: siteTitle, label: "Titolo sito (tab del browser, anteprime social)", widget: string }
+          - { name: artistName, label: "Nome artista (barra di navigazione, footer, metadati)", widget: string }
+          - { name: description, label: "Descrizione del sito (motori di ricerca, anteprime social)", widget: text }
+          - name: defaultTheme
+            label: "Tema predefinito"
+            widget: select
+            options:
+              - { label: Scuro, value: dark }
+              - { label: Chiaro, value: light }
+
+      - name: bio
+        label: "Bio e contatti"
+        file: data/bio.json
+        extension: json
+        format: json
+        editor:
+          preview: false
+        fields:
+          - name: bio
+            label: Biografia
+            widget: markdown
+            hint: "Separa i paragrafi con una riga vuota. Usa _testo_ per il corsivo."
+          - { name: email, label: "Email di contatto", widget: string }
+          - name: social
+            label: Social
+            widget: object
+            fields:
+              - { name: instagram, label: "Instagram URL", widget: string, required: false }
+              - { name: facebook, label: "Facebook URL", widget: string, required: false }
+          - name: aboutSections
+            label: "Sezioni biografia"
+            widget: object
+            fields:
+              - { name: biografia, label: "Testo biografico", widget: boolean, default: true }
+              - { name: mostre, label: "Mostre e partecipazioni", widget: boolean, default: true }
+              - { name: premi, label: Premi, widget: boolean, default: false }
+
+      - name: homepage
+        label: Homepage
+        file: data/homepage.json
+        extension: json
+        format: json
+        editor:
+          preview: false
+        fields:
+          - name: hero
+            label: Hero
+            widget: object
+            fields:
+              - { name: name, label: Nome, widget: string }
+              - { name: subtitle, label: Sottotitolo, widget: string }
+              - name: desktop
+                label: "Immagini desktop (orizzontale, ≥768px)"
+                widget: list
+                allow_add: true
+                field: { name: image, label: Immagine, widget: image }
+              - name: mobile
+                label: "Immagini mobile (verticale, <768px)"
+                widget: list
+                allow_add: true
+                field: { name: image, label: Immagine, widget: image }
+          - name: sectionVisibility
+            label: "Sezioni visibili"
+            widget: object
+            fields:
+              - { name: galleries, label: Gallerie, widget: boolean, default: true }
+              - { name: articles, label: Articoli, widget: boolean, default: false }
+              - { name: about, label: Biografia, widget: boolean, default: true }
+              - { name: exhibitions-cta, label: "CTA Esposizioni", widget: boolean, default: true }
+              - { name: contact, label: Contatti, widget: boolean, default: true }
+              - { name: featured, label: "In evidenza", widget: boolean, default: false }
+          - name: sectionOrder
+            label: "Ordine sezioni homepage"
+            widget: list
+            allow_add: true
+            field:
+              name: section
+              label: Sezione
+              widget: select
+              options:
+                - { label: Gallerie, value: galleries }
+                - { label: Articoli, value: articles }
+                - { label: Biografia, value: about }
+                - { label: "CTA Esposizioni", value: exhibitions-cta }
+                - { label: Contatti, value: contact }
+                - { label: "In evidenza", value: featured }
+          - name: exhibitionsCta
+            label: "Call to action Esposizioni"
+            widget: object
+            fields:
+              - { name: title, label: Titolo, widget: string }
+              - { name: description, label: Descrizione, widget: text }
+              - { name: buttonLabel, label: "Testo bottone", widget: string }
+
+  # ── Mostre ────────────────────────────────────────────────────────────────
+  - name: mostre
+    label: "Mostre e partecipazioni"
+    folder: public/assets/mostre
+    create: true
+    path: "{{slug}}/entry"
+    slug: "{{anno}}-{{description}}"
+    identifier_field: description
+    extension: json
+    format: json
+    sortable_fields:
+      - { field: anno, default_sort: desc }
+      - description
+    summary: "{{anno}} — {{description}}"
+    view_groups:
+      - label: "Per anno"
+        field: anno
+    editor:
+      preview: false
+    fields:
+      - { name: anno, label: Anno, widget: string }
+      - { name: description, label: Descrizione, widget: string }
+
+  # ── Premi ─────────────────────────────────────────────────────────────────
+  - name: premi
+    label: Premi
+    folder: public/assets/premi
+    create: true
+    path: "{{slug}}/entry"
+    slug: "{{anno}}-{{description}}"
+    identifier_field: description
+    extension: json
+    format: json
+    sortable_fields:
+      - { field: anno, default_sort: desc }
+      - description
+    summary: "{{anno}} — {{description}}"
+    view_groups:
+      - label: "Per anno"
+        field: anno
+    editor:
+      preview: false
+    fields:
+      - { name: anno, label: Anno, widget: string }
+      - { name: description, label: Descrizione, widget: string }
+
+  # ── Articoli ──────────────────────────────────────────────────────────────
+  - name: articles
+    label: Articoli
+    folder: public/assets/articles
+    create: true
+    path: "{{slug}}/article"
+    extension: json
+    format: json
+    media_folder: ""
+    public_folder: ""
+    sortable_fields: [order, title]
+    summary: "{{order}}. {{title}}"
+    fields:
+      - { name: order, label: Ordine, widget: number, value_type: int, default: 99 }
+      - { name: title, label: Titolo, widget: string }
+      - { name: subtitle, label: Sottotitolo, widget: string, required: false }
+      - { name: description, label: Descrizione, widget: text, required: false }
+      - name: imagePosition
+        label: "Posizione immagine"
+        widget: select
+        options:
+          - { label: Sinistra, value: left }
+          - { label: Destra, value: right }
+        default: left
+      - name: images
+        label: Immagini
+        widget: list
+        required: false
+        allow_add: true
+        field: { name: image, label: Immagine, widget: image }
+      - name: link
+        label: Link
+        widget: object
+        required: false
+        fields:
+          - { name: text, label: Testo, widget: string }
+          - { name: url, label: URL, widget: string }
+          - { name: newTab, label: "Nuova scheda", widget: boolean, default: true }
+
+  # ── Esposizioni ───────────────────────────────────────────────────────────
+  - name: exhibitions
+    label: Esposizioni
+    folder: public/assets/exhibitions
+    create: true
+    path: "{{slug}}/article"
+    slug: "{{date}}-{{title}}"
+    extension: json
+    format: json
+    media_folder: ""
+    public_folder: ""
+    sortable_fields:
+      - { field: date, default_sort: desc }
+      - title
+    summary: "{{title}} — {{date}}"
+    view_filters:
+      - label: "In homepage"
+        field: showInHomepage
+        pattern: "true"
+    view_groups:
+      - label: "Per anno"
+        field: date
+        pattern: \d{4}
+    fields:
+      - { name: date, label: "Data inizio (es. 2024, 2024-05, 2024-05-15)", widget: string, required: false }
+      - { name: dateEnd, label: "Data fine (opzionale, stesso formato — per mostre in corso o future)", widget: string, required: false }
+      - { name: title, label: Titolo, widget: string }
+      - { name: subtitle, label: Sottotitolo, widget: string, required: false }
+      - { name: description, label: Descrizione, widget: text, required: false }
+      - name: imagePosition
+        label: "Posizione immagine"
+        widget: select
+        options:
+          - { label: Sinistra, value: left }
+          - { label: Destra, value: right }
+        default: left
+      - { name: showInHomepage, label: "Mostra in homepage", widget: boolean, default: false }
+      - name: images
+        label: Immagini
+        widget: list
+        required: false
+        allow_add: true
+        field: { name: image, label: Immagine, widget: image }
+      - name: link
+        label: Link
+        widget: object
+        required: false
+        fields:
+          - { name: text, label: Testo, widget: string }
+          - { name: url, label: URL, widget: string }
+          - { name: newTab, label: "Nuova scheda", widget: boolean, default: true }
+
+  # ── Gallerie ──────────────────────────────────────────────────────────────
+  # Due folder collection sulla STESSA cartella base.
+  #
+  # ATTENZIONE: Decap non separa le entry per nome-file. Il listing di una folder
+  # collection filtra SOLO per estensione e profondità (core: listEntries →
+  # entriesByFolder(folder, extension, depth); github: filterByExtension; depth è
+  # un massimo). Senza discriminante, entrambe le collection vedrebbero sia
+  # gallery.json sia gallery-config.json, e salvare l'uno nello schema dell'altro
+  # ne azzererebbe i campi.
+  #
+  # La separazione è quindi ottenuta con il campo `type` + l'opzione `filter`, che
+  # agisce sui campi del JSON già parsato. Un file SENZA `type` non compare nel CMS.
+
+  - name: gallery_opere
+    label: "Gallerie — Opere"
+    label_singular: "Galleria"
+    folder: public/assets/galleries
+    create: true
+    path: "{{slug}}/gallery"
+    extension: json
+    format: json
+    filter: { field: type, value: opere }
+    identifier_field: nome
+    slug: "{{nome}}"
+    summary: "{{nome}}"
+    media_folder: ""
+    public_folder: ""
+    editor:
+      preview: false
+    fields:
+      - { name: type, widget: hidden, default: opere }
+      - name: nome
+        label: "Nome cartella (indirizzo della pagina)"
+        widget: string
+        pattern: ['^[a-z0-9-]+$', "Solo lettere minuscole, numeri e trattini (es. section1, opere-su-carta)"]
+        hint: >-
+          Diventa l'indirizzo /gallerie/{nome} e la cartella delle immagini.
+          Scegliilo con cura: cambiarlo dopo NON sposta la galleria.
+      - name: items
+        label: Opere
+        widget: list
+        allow_add: true
+        collapsed: true
+        summary: "{{fields.alt}}"
+        fields:
+          - { name: file, label: Immagine, widget: image }
+          - { name: alt, label: Descrizione, widget: string }
+          - { name: size, label: "Dimensioni (es. 80x60)", widget: string, required: false }
+          - { name: medium, label: Tecnica, widget: string, required: false }
+          - { name: featured, label: "In evidenza (homepage)", widget: boolean, default: false, required: false }
+
+  - name: gallery_config
+    label: "Gallerie — Configurazione"
+    label_singular: "Configurazione galleria"
+    folder: public/assets/galleries
+    create: true
+    path: "{{slug}}/gallery-config"
+    extension: json
+    format: json
+    filter: { field: type, value: config }
+    identifier_field: nome
+    slug: "{{nome}}"
+    summary: "{{nome}}"
+    editor:
+      preview: false
+    fields:
+      - { name: type, widget: hidden, default: config }
+      - name: nome
+        label: "Nome cartella"
+        widget: string
+        pattern: ['^[a-z0-9-]+$', "Solo lettere minuscole, numeri e trattini"]
+        hint: >-
+          DEVE coincidere esattamente con il "Nome cartella" indicato in
+          "Gallerie — Opere", altrimenti questa configurazione viene ignorata.
+      - { name: title, label: Titolo, widget: string, required: false }
+      - { name: subtitle, label: Sottotitolo, widget: string, required: false }
+      - { name: order, label: "Ordine (numero, crescente)", widget: number, required: false, value_type: int }
+      - name: visibility
+        label: Visibilità
+        widget: select
+        default: public
+        hint: >-
+          **Pubblica**: visibile in homepage e con pagina dedicata. ·
+          **Solo pagina diretta**: fuori dalla homepage, ma la pagina
+          /gallerie/{slug} resta raggiungibile e in sitemap. ·
+          **Bozza**: nascosta ovunque, pagina non raggiungibile (404).
+        options:
+          - { label: "Pubblica (home + pagina)", value: public }
+          - { label: "Solo pagina diretta (fuori dalla home)", value: unlisted }
+          - { label: "Bozza (nascosta ovunque)", value: draft }
+      - name: layout
+        label: Impaginazione
+        widget: select
+        default: masonry
+        required: false
+        options:
+          - { label: "Masonry (proporzioni originali)", value: masonry }
+          - { label: "Griglia 3 colonne (ritaglio 4:3)", value: grid-3 }
+          - { label: "Griglia 2 colonne (ritaglio 4:3)", value: grid-2 }
+      - { name: enabled, label: "Anteprima limitata in homepage", widget: boolean, default: false }
+      - { name: limitItems, label: "Numero opere mostrate (se attiva)", widget: number, default: 6, value_type: int, min: 1 }
+      - { name: description, label: Descrizione, widget: text, required: false }

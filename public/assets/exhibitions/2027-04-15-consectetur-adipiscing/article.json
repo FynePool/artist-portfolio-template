@@ -1,0 +1,12 @@
+{
+  "date": "2027-04-15",
+  "dateEnd": "2027-05-30",
+  "title": "Consectetur adipiscing",
+  "subtitle": "Aprile 2027 · Spazio Ipsum · Città",
+  "description": "Esposizione futura di esempio: mostra il badge \"Dal …\" e il link \"Aggiungi al calendario\". Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.",
+  "imagePosition": "right",
+  "showInHomepage": true,
+  "images": [
+    "01_locandina.jpg"
+  ]
+}

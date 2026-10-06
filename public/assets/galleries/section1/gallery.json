@@ -1,0 +1,27 @@
+{
+  "type": "opere",
+  "nome": "section1",
+  "items": [
+    {
+      "file": "/assets/galleries/section1/01_lorem-ipsum.jpg",
+      "alt": "Lorem ipsum",
+      "size": "60x80",
+      "medium": "Tecnica A",
+      "featured": true
+    },
+    {
+      "file": "/assets/galleries/section1/02_dolor-sit-amet.jpg",
+      "alt": "Dolor sit amet",
+      "size": "80x60",
+      "medium": "Tecnica B",
+      "featured": false
+    },
+    {
+      "file": "/assets/galleries/section1/03_consectetur.jpg",
+      "alt": "Consectetur",
+      "size": "50x70",
+      "medium": "Tecnica A",
+      "featured": false
+    }
+  ]
+}

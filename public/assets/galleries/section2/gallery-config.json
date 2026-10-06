@@ -1,0 +1,11 @@
+{
+  "type": "config",
+  "nome": "section2",
+  "title": "Section2",
+  "subtitle": "Lorem ipsum dolor sit amet",
+  "order": 20,
+  "visibility": "public",
+  "layout": "masonry",
+  "enabled": false,
+  "limitItems": 6
+}

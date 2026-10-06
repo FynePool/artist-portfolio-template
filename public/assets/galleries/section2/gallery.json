@@ -1,0 +1,24 @@
+{
+  "type": "opere",
+  "nome": "section2",
+  "items": [
+    {
+      "file": "/assets/galleries/section2/01_adipiscing-elit.jpg",
+      "alt": "Adipiscing elit",
+      "medium": "Tecnica C",
+      "featured": true
+    },
+    {
+      "file": "/assets/galleries/section2/02_sed-do-eiusmod.jpg",
+      "alt": "Sed do eiusmod",
+      "medium": "Tecnica C",
+      "featured": false
+    },
+    {
+      "file": "/assets/galleries/section2/03_tempor-incididunt.jpg",
+      "alt": "Tempor incididunt",
+      "medium": "Tecnica D",
+      "featured": false
+    }
+  ]
+}

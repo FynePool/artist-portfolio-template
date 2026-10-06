@@ -1,0 +1,17 @@
+{
+  "date": "2025-05",
+  "title": "Lorem ipsum dolor",
+  "subtitle": "Maggio 2025 · Galleria Lorem · Città",
+  "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.",
+  "imagePosition": "left",
+  "showInHomepage": true,
+  "link": {
+    "text": "Scopri di più",
+    "url": "https://example.com",
+    "newTab": true
+  },
+  "images": [
+    "01_allestimento.jpg",
+    "02_allestimento.jpg"
+  ]
+}

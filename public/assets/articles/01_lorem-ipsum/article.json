@@ -1,0 +1,15 @@
+{
+  "order": 1,
+  "title": "Lorem ipsum",
+  "subtitle": "Articolo di esempio",
+  "description": "Questo è un blocco editoriale di esempio: immagine (o carosello, con più immagini) affiancata da testo. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  "imagePosition": "left",
+  "link": {
+    "text": "Scopri di più",
+    "url": "https://example.com",
+    "newTab": true
+  },
+  "images": [
+    "01_lorem-ipsum.jpg"
+  ]
+}

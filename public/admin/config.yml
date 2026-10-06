@@ -1,4 +1,4 @@
-# SETUP — valori da personalizzare (skill /setup-cms o README "Setup manuale"):
+# SETUP — valori da personalizzare (skill /setup-cms o README "Manual setup"):
 #   backend.repo      → "owner/nome-repo" della TUA repository GitHub
 #   backend.base_url  → URL di produzione del sito (senza / finale)
 #   site_url          → stesso URL di produzione

@@ -117,7 +117,7 @@ La persona accetta l'invito (email o `https://github.com/OWNER/NOME/invitations`
 `SITE/admin`. Può richiedere tempo: annota `⏳ in attesa del gestore` e prosegui con le fasi
 successive, tornando qui prima della chiusura. Verifica: `gh api repos/OWNER/NOME/collaborators/USERNAME`
 risponde 204 (invito accettato) e il gestore conferma il login.
-Indicagli la sezione "Guida all'utilizzo (CMS)" del README: il CMS usa il flusso editoriale
+Indicagli la sezione "User guide (CMS)" del README (in inglese, con le etichette italiane del pannello): il CMS usa il flusso editoriale
 (Draft → In Review → Ready → **Publish**); solo Publish manda online.
 Se gestore = proprietario: `✔ coincide con 4.8`.
 

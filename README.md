@@ -1,301 +1,303 @@
 # Artist Portfolio Template
 
-Template per il sito portfolio di un artista: gallerie di opere, esposizioni, biografia, form di contatto e un pannello di amministrazione (`/admin`) per gestire i contenuti **senza toccare codice**.
+A template for an artist's portfolio website: artwork galleries, exhibitions, biography, a contact form and an admin panel (`/admin`) to manage the content **without touching code**.
 
-Contenuti di esempio inclusi (testi lorem ipsum, immagini stock, gallerie `section1`, `section2`, `section3`): servono a vedere subito tutte le funzionalità e vanno sostituiti con quelli dell'artista.
+Sample content is included (lorem ipsum texts, stock images, galleries `section1`, `section2`, `section3`) so you can see every feature right away; replace it with the artist's own.
 
-**Funzionalità**
+> **Language:** the website's interface and the admin panel are currently in Italian. Texts written by the artist (bio, titles, descriptions) can be in any language.
 
-- Hero full-screen con carosello e immagini separate per desktop e mobile
-- Gallerie auto-rilevate da cartelle, ognuna con pagina dedicata (`/gallerie/{nome}`), filtro per tecnica, slideshow fullscreen e impaginazione configurabile (masonry o griglia)
-- Lightbox con zoom (pinch, doppio tap, rotella) e pulsante "Richiedi informazioni su quest'opera" che precompila il form contatti
-- Sezione "In evidenza" con le opere selezionate
-- Pagina Esposizioni con badge automatico "In corso" / "Dal …" e link "Aggiungi al calendario" (.ics) per le mostre future
-- Biografia con timeline di mostre e premi
-- Form contatti via [Web3Forms](https://web3forms.com) (nessun backend)
-- CMS [Decap](https://decapcms.org) con login GitHub e flusso editoriale (bozza → revisione → pubblicazione)
-- SEO: sitemap, robots, immagini Open Graph generate automaticamente, markup schema.org (JSON-LD)
-- Tema chiaro/scuro con default configurabile, Vercel Analytics e Speed Insights
+**Features**
+
+- Full-screen hero with carousel and separate images for desktop and mobile
+- Galleries auto-discovered from folders, each with its own page (`/gallerie/{name}`), filter by medium, full-screen slideshow and configurable layout (masonry or grid)
+- Lightbox with zoom (pinch, double tap, mouse wheel) and a "request information about this artwork" button that prefills the contact form
+- "Featured" section with selected artworks
+- Exhibitions page with automatic "ongoing" / "from …" badges and an "add to calendar" (.ics) link for upcoming shows
+- Biography with a timeline of exhibitions and awards
+- Contact form via [Web3Forms](https://web3forms.com) (no backend)
+- [Decap CMS](https://decapcms.org) with GitHub login and editorial workflow (draft → review → publish)
+- SEO: sitemap, robots, automatically generated Open Graph images, schema.org markup (JSON-LD)
+- Light/dark theme with configurable default, Vercel Analytics and Speed Insights
 
 **Stack:** Next.js 16 · React 19 · TypeScript · Tailwind CSS v4 · Framer Motion · Decap CMS · Vercel
 
 ---
 
-## Avvio rapido (con Claude)
+## Quick start (with Claude)
 
-### Opzione A — plugin **Artist Portfolio** (consigliata)
+### Option A — the **Artist Portfolio** plugin (recommended)
 
-Il plugin è disponibile nella [directory dei plugin di Claude](https://claude.ai/directory): crea tutto partendo da zero. Verifica i requisiti, crea la tua repo **privata** dal template, crea il progetto Vercel con il nome che scegli (`nome.vercel.app`) e mette il sito online. Poi ti indica come proseguire con `/setup` dentro la repo.
+The plugin is available in [Claude's plugin directory](https://claude.ai/directory) and builds everything from scratch: it checks the prerequisites, creates your **private** repository from the template, creates the Vercel project with the name you choose (`name.vercel.app`) and puts the site online. Then it tells you how to continue with `/setup` inside the repository.
 
-**Installazione dalla directory (nessun marketplace da aggiungere):**
+**Install from the directory (no marketplace to add):**
 
-1. Su claude.ai o nell'app desktop apri **Customize → Plugins → Discover**, cerca **Artist Portfolio** e aggiungilo. In Claude Code puoi anche sfogliare la directory con `/plugin directory`.
-2. Il plugin funziona in chat, in Cowork e in Claude Code, dove arriva sincronizzato dal tuo account (`artist-portfolio@synced`). Gli aggiornamenti arrivano da soli.
-3. Avvialo scrivendo `/artist-portfolio:setup`, oppure chiedendo a Claude di creare un nuovo portfolio d'artista.
+1. On claude.ai or in the desktop app, open **Customize → Plugins → Discover**, search for **Artist Portfolio** and add it. In Claude Code you can also browse the directory with `/plugin directory`.
+2. The plugin works in chat, in Cowork and in Claude Code, where it is synced from your account (`artist-portfolio@synced`). Updates arrive automatically.
+3. Start it by typing `/artist-portfolio:setup`, or by asking Claude to create a new artist portfolio.
 
-**In alternativa, da questa repo in Claude Code** (terminale o app desktop):
+**Alternatively, from this repository in Claude Code** (terminal or desktop app):
 
 ```
 /plugin install artist-portfolio --marketplace FynePool/artist-portfolio-template
 /artist-portfolio:setup
 ```
 
-Il setup completo, dopo l'avvio, richiede comunque Claude Code (sul computer o nel cloud). Il plugin risponde nella lingua dell'utente; il sito generato e il setup dentro la repo sono per ora in italiano.
+After the kickoff, the full setup still requires Claude Code (on your computer or in the cloud). The plugin replies in your language; the generated site and the setup inside the repository are currently in Italian.
 
-### Opzione B — template manuale
+### Option B — manual template
 
-1. Pulsante **Use this template** → **Create a new repository** → **Private**, nel tuo account personale.
-2. Apri la nuova repo in Claude Code ed esegui `/setup`:
-   - **sul computer**: `git clone https://github.com/TUO-ACCOUNT/TUA-REPO.git`, poi apri la cartella in Claude Code;
-   - **nel cloud**: installa la [Claude GitHub App](https://github.com/apps/claude) sulla repo e avvia una sessione su [claude.ai/code](https://claude.ai/code) (piani Pro, Max o Team). In cloud Claude usa il connettore Vercel al posto della CLI; le immagini delle opere si caricano dal CMS e i passaggi da browser li fai tu.
+1. **Use this template** → **Create a new repository** → **Private**, in your personal account.
+2. Open the new repository in Claude Code and run `/setup`:
+   - **on your computer**: `git clone https://github.com/YOUR-ACCOUNT/YOUR-REPO.git`, then open the folder in Claude Code;
+   - **in the cloud**: install the [Claude GitHub App](https://github.com/apps/claude) on the repository and start a session at [claude.ai/code](https://claude.ai/code) (Pro, Max or Team plans). In the cloud Claude uses the Vercel connector instead of the CLI; artwork images are uploaded from the CMS and browser steps are done by you.
 
-### Prima di iniziare: piano Vercel Hobby
+### Before you start: Vercel Hobby plan
 
-Il piano gratuito Hobby va bene per un portfolio, con tre vincoli che il setup ti farà confermare:
+The free Hobby plan is fine for a portfolio, with three constraints the setup will ask you to confirm:
 
-- **Uso non commerciale**: il sito può essere una vetrina delle opere; per pubblicizzarne o gestirne la vendita (prezzi, "acquista", pagamenti) Vercel richiede il piano Pro ([linee guida](https://vercel.com/docs/limits/fair-use-guidelines#commercial-usage)). La scelta è tua.
-- **Un solo account che modifica il sito**: con una repo privata, Vercel Hobby pubblica solo le modifiche del proprietario dell'account. GitHub, Vercel e login al CMS devono essere della stessa persona; se i contenuti li gestisce un altro account servono il piano Pro o una repo pubblica.
-- **Repo in un account personale**: Hobby non pubblica repo private di organizzazioni GitHub.
+- **Non-commercial use**: the site can be a showcase of the artworks; to advertise or handle their sale (prices, "buy", payments) Vercel requires the Pro plan ([guidelines](https://vercel.com/docs/limits/fair-use-guidelines#commercial-usage)). The choice is yours.
+- **A single account edits the site**: with a private repository, Vercel Hobby only deploys changes made by the account owner. GitHub, Vercel and the CMS login must belong to the same person; if someone else's account manages the content, you need the Pro plan or a public repository.
+- **Repository in a personal account**: Hobby does not deploy private repositories owned by GitHub organizations.
 
-La skill `/setup` controlla quali strumenti hai a disposizione (GitHub CLI, Vercel CLI o connettore Vercel, browser, connettore Gmail) e ti porta attraverso **tutti** i passaggi, nell'ordine, tenendo un registro in `setup-progress.md`: un passaggio viene segnato come fatto solo dopo una verifica, e quelli opzionali si saltano solo con un tuo "no" esplicito. Se interrompi, alla volta successiva `/setup` riprende dal primo passaggio aperto. Le azioni esterne (creare repo, deploy, variabili, inviti, invio di form) partono solo dopo la tua conferma.
+The `/setup` skill checks which tools are available (GitHub CLI, Vercel CLI or Vercel connector, browser, Gmail connector) and walks you through **every** step, in order, keeping a log in `setup-progress.md`: a step is marked as done only after it has been verified, and optional steps are skipped only on your explicit "no". If you stop, the next `/setup` resumes from the first open step. External actions (creating repositories, deploying, setting variables, sending invites, submitting forms) only happen after you confirm them.
 
-| Fase | Skill | Contenuto |
+| Phase | Skill | What it covers |
 |---|---|---|
-| 0. Prerequisiti | `/setup` | Account, strumenti, raccolta informazioni |
-| 1. Repository | `/setup-repo` | Repo GitHub privata, `backend.repo` del CMS, rimozione dei file del plugin |
-| 2. Contenuti | `/setup-content` | Nome, bio, sezioni (al posto di `section1..N`), opere, esempi, hero, icone, colori |
-| 3. Deploy | `/setup-vercel` | Progetto Vercel collegato a GitHub, primo deploy, URL di produzione |
-| 4. CMS | `/setup-cms` | GitHub OAuth App, variabili OAuth, login a `/admin`, accesso per chi gestisce i contenuti |
-| 5. Form contatti (opzionale) | `/setup-contact-form` | Chiave Web3Forms, variabile, invio di prova |
-| 6. Dominio (opzionale) | `/setup-domain` | Dominio personalizzato e riallineamento di CMS e OAuth |
-| 7. Statistiche (opzionale) | `/setup` | Vercel Web Analytics e Speed Insights |
-| 8. Chiusura | `/setup` | Verifica finale e riepilogo |
+| 0. Prerequisites | `/setup` | Accounts, tools, gathering information |
+| 1. Repository | `/setup-repo` | Private GitHub repository, CMS `backend.repo`, removal of the plugin files |
+| 2. Content | `/setup-content` | Name, bio, sections (replacing `section1..N`), artworks, samples, hero, icons, colors |
+| 3. Deploy | `/setup-vercel` | Vercel project linked to GitHub, first deployment, production URL |
+| 4. CMS | `/setup-cms` | GitHub OAuth App, OAuth variables, `/admin` login, access for whoever manages the content |
+| 5. Contact form (optional) | `/setup-contact-form` | Web3Forms key, variable, test message |
+| 6. Domain (optional) | `/setup-domain` | Custom domain and realignment of CMS and OAuth |
+| 7. Analytics (optional) | `/setup` | Vercel Web Analytics and Speed Insights |
+| 8. Wrap-up | `/setup` | Final check and summary |
 
 <details>
-<summary><strong>Tutti i passaggi del setup: chi fa cosa</strong></summary>
+<summary><strong>Every setup step: who does what</strong></summary>
 
 <br>
 
-**Auto** = lo fa Claude (con la tua conferma per le azioni esterne) · **Manuale** = lo fai tu · **Misto** = Claude prepara o verifica, tu completi. Dove è indicata un'alternativa ("Manuale se…"), dipende dagli strumenti disponibili.
+**Auto** = done by Claude (with your confirmation for external actions) · **Manual** = done by you · **Mixed** = Claude prepares or verifies, you complete it. Where an alternative is given ("Manual if…"), it depends on the available tools.
 
-| # | Passaggio | Chi |
+| # | Step | Who |
 |---|---|---|
-| 0.1 | Repo aperta in una sessione Claude Code (computer o cloud) | Manuale |
+| 0.1 | Repository open in a Claude Code session (computer or cloud) | Manual |
 | 0.2 | `npm install` | Auto |
-| 0.3 | Account GitHub personale del proprietario (lo stesso del CMS) | Manuale |
-| 0.4 | Account Vercel collegato allo stesso GitHub; vincoli Hobby confermati | Manuale |
-| 0.5 | Login GitHub CLI (`gh auth login`) o scelta della strada manuale | Manuale |
-| 0.6 | Vercel CLI aggiornata (Auto) e login `vercel login` o autorizzazione connettore (Manuale) | Misto |
-| 0.7 | Risposte alle domande iniziali (nome, sezioni, email, gestore, dominio) | Manuale |
-| 1.1 | Creazione repo GitHub propria | Auto (Manuale se manca la GitHub CLI) |
-| 1.2 | `backend.repo` nel CMS, commit e push | Auto |
-| 1.3 | Rimozione dei file del plugin dalla repo | Auto |
-| 2.1 | Identità: nome, titolo, descrizione, tema | Auto (testi forniti da te) |
-| 2.2 | Hero: nome, sottotitolo, immagini | Auto (immagini fornite da te) |
-| 2.3 | Biografia, email, social | Auto (testi forniti da te) |
-| 2.4 | Sezioni al posto di `section1..N` | Auto |
-| 2.5 | Opere nelle gallerie | Auto con i tuoi file, oppure Manuale dal CMS |
-| 2.6 | Esposizioni, articoli, mostre, premi di esempio | Auto |
-| 2.7 | Icona e logo | Auto |
-| 2.8 | Colori e font | Auto |
-| 2.9 | Build, anteprima locale (la approvi tu), commit e push | Misto |
-| 3.1 | Progetto Vercel collegato alla repo | Auto (Manuale da dashboard, o per autorizzare l'app GitHub di Vercel) |
-| 3.2 | Primo deploy | Auto |
-| 3.3 | URL di produzione | Auto |
-| 3.4 | Verifica sito online | Auto |
-| 4.1 | URL di produzione nel `config.yml` del CMS | Auto |
-| 4.2 | Creazione GitHub OAuth App | Misto (Claude compila i campi nel browser, tu registri) |
-| 4.3 | Generazione client secret | **Manuale, sempre** |
-| 4.4 | `OAUTH_CLIENT_ID` su Vercel | Auto |
-| 4.5 | `OAUTH_CLIENT_SECRET` su Vercel | **Manuale, sempre** (il segreto non passa da Claude) |
-| 4.6 | Commit, push, nuovo deploy | Auto |
-| 4.7 | Verifica tecnica `/api/auth` e `config.yml` pubblicato | Auto |
-| 4.8 | Primo login a `/admin` | Manuale |
-| 4.9 | Accesso per chi gestisce i contenuti (il proprietario stesso, o un collaboratore solo con Pro o repo pubblica) | Auto |
-| 4.10 | Accettazione invito e primo login del gestore | Manuale (il gestore) |
-| 5.1 | Decisione: form sì/no | Manuale |
-| 5.2 | Richiesta access key Web3Forms | Misto (Claude compila il form nel browser con conferma) |
-| 5.3 | Recupero chiave dalla mail | Auto con connettore Gmail, altrimenti Manuale |
-| 5.4 | `NEXT_PUBLIC_WEB3FORMS_KEY` su Vercel e `.env.local` | Auto |
-| 5.5 | Nuovo deploy e verifica form attivo | Auto |
-| 5.6 | Messaggio di prova inviato e ricevuto | Misto |
-| 6.1 | Decisione: dominio sì/no | Manuale |
-| 6.2 | Acquisto dominio | Manuale |
-| 6.3 | Dominio aggiunto al progetto Vercel | Auto |
-| 6.4 | Record DNS dal registrar | Manuale (verifica Auto) |
-| 6.5 | `config.yml` sul nuovo dominio | Auto |
-| 6.6 | URL della GitHub OAuth App aggiornati | Misto |
-| 6.7 | Verifica e login sul nuovo dominio | Misto |
-| 7.1 | Abilitare Analytics e Speed Insights | Manuale (dashboard Vercel) |
-| 8.1 | Verifica finale `check-setup` | Auto |
-| 8.2 | Riepilogo finale | Auto |
+| 0.3 | Owner's personal GitHub account (the same used for the CMS) | Manual |
+| 0.4 | Vercel account linked to the same GitHub account; Hobby constraints confirmed | Manual |
+| 0.5 | GitHub CLI login (`gh auth login`) or choice of the manual path | Manual |
+| 0.6 | Up-to-date Vercel CLI (Auto) and `vercel login` or connector authorization (Manual) | Mixed |
+| 0.7 | Answers to the initial questions (name, sections, email, content manager, domain) | Manual |
+| 1.1 | Creation of your own GitHub repository | Auto (Manual without the GitHub CLI) |
+| 1.2 | `backend.repo` in the CMS, commit and push | Auto |
+| 1.3 | Removal of the plugin files from the repository | Auto |
+| 2.1 | Identity: name, title, description, theme | Auto (texts provided by you) |
+| 2.2 | Hero: name, subtitle, images | Auto (images provided by you) |
+| 2.3 | Biography, email, social links | Auto (texts provided by you) |
+| 2.4 | Sections replacing `section1..N` | Auto |
+| 2.5 | Artworks in the galleries | Auto with your files, or Manual from the CMS |
+| 2.6 | Sample exhibitions, articles, shows, awards | Auto |
+| 2.7 | Icon and logo | Auto |
+| 2.8 | Colors and fonts | Auto |
+| 2.9 | Build, local preview (approved by you), commit and push | Mixed |
+| 3.1 | Vercel project linked to the repository | Auto (Manual from the dashboard, or to authorize Vercel's GitHub app) |
+| 3.2 | First deployment | Auto |
+| 3.3 | Production URL | Auto |
+| 3.4 | Site online check | Auto |
+| 4.1 | Production URL in the CMS `config.yml` | Auto |
+| 4.2 | Creation of the GitHub OAuth App | Mixed (Claude fills in the fields in the browser, you register it) |
+| 4.3 | Client secret generation | **Always manual** |
+| 4.4 | `OAUTH_CLIENT_ID` on Vercel | Auto |
+| 4.5 | `OAUTH_CLIENT_SECRET` on Vercel | **Always manual** (the secret never goes through Claude) |
+| 4.6 | Commit, push, new deployment | Auto |
+| 4.7 | Technical check of `/api/auth` and the published `config.yml` | Auto |
+| 4.8 | First login to `/admin` | Manual |
+| 4.9 | Access for whoever manages the content (the owner, or a collaborator only with Pro or a public repository) | Auto |
+| 4.10 | Invitation accepted and content manager's first login | Manual (content manager) |
+| 5.1 | Decision: contact form yes/no | Manual |
+| 5.2 | Web3Forms access key request | Mixed (Claude fills in the form in the browser after your confirmation) |
+| 5.3 | Retrieving the key from the email | Auto with the Gmail connector, otherwise Manual |
+| 5.4 | `NEXT_PUBLIC_WEB3FORMS_KEY` on Vercel and in `.env.local` | Auto |
+| 5.5 | New deployment and check that the form is active | Auto |
+| 5.6 | Test message sent and received | Mixed |
+| 6.1 | Decision: custom domain yes/no | Manual |
+| 6.2 | Domain purchase | Manual |
+| 6.3 | Domain added to the Vercel project | Auto |
+| 6.4 | DNS records at the registrar | Manual (verified Auto) |
+| 6.5 | `config.yml` on the new domain | Auto |
+| 6.6 | GitHub OAuth App URLs updated | Mixed |
+| 6.7 | Check and login on the new domain | Mixed |
+| 7.1 | Enable Analytics and Speed Insights | Manual (Vercel dashboard) |
+| 8.1 | Final `check-setup` | Auto |
+| 8.2 | Final summary | Auto |
 
 </details>
 
-Puoi lanciare le singole skill anche separatamente, ad esempio `/setup-content` per aggiornare i contenuti in un secondo momento.
+You can also run each skill on its own, for example `/setup-content` to update the content later.
 
 ---
 
 <details>
-<summary><strong>Setup manuale (senza Claude Code)</strong></summary>
+<summary><strong>Manual setup (without Claude Code)</strong></summary>
 
 <br>
 
-Stato del setup in qualunque momento:
+Setup status at any time:
 
 ```bash
 npm run check-setup
 ```
 
-1. **Repo** — crea la repo privata da "Use this template" nel tuo account personale, clonala, `npm install`. In `public/admin/config.yml` imposta `backend.repo: TUO-ACCOUNT/TUA-REPO` ed elimina `plugin/` e `.claude-plugin/` (servono solo a distribuire il plugin). Fai i commit con il tuo account GitHub (vedi i vincoli Hobby sopra).
-2. **Contenuti** — modifica `data/general.json` (`siteTitle`, `artistName`, `description`, `defaultTheme`), `data/bio.json` (bio, email, social), `data/homepage.json` (hero, sezioni). Rinomina le cartelle `public/assets/galleries/section1..3` con il nome delle tue sezioni (solo `a-z`, `0-9`, `-`) e aggiorna `nome` e i percorsi `file` nei due JSON di ogni galleria. Sostituisci immagini hero, opere, esposizioni, `app/icon.svg` e `public/admin/logo.svg` (rimuovi il commento `template-default-icon`). Tutti i contenuti si possono anche cambiare dopo dal CMS.
-3. **Vercel** — su [vercel.com/new](https://vercel.com/new) importa la repo e fai Deploy (zero configurazione). Annota l'URL di produzione (es. `https://nome.vercel.app`).
+1. **Repository** — create the private repository with "Use this template" in your personal account, clone it, run `npm install`. In `public/admin/config.yml` set `backend.repo: YOUR-ACCOUNT/YOUR-REPO` and delete `plugin/` and `.claude-plugin/` (they are only used to distribute the plugin). Commit with your own GitHub account (see the Hobby constraints above).
+2. **Content** — edit `data/general.json` (`siteTitle`, `artistName`, `description`, `defaultTheme`), `data/bio.json` (bio, email, social links), `data/homepage.json` (hero, sections). Rename the folders `public/assets/galleries/section1..3` after your sections (only `a-z`, `0-9`, `-`) and update `nome` and the `file` paths in each gallery's two JSON files. Replace hero images, artworks, exhibitions, `app/icon.svg` and `public/admin/logo.svg` (remove the `template-default-icon` comment). All content can also be changed later from the CMS.
+3. **Vercel** — at [vercel.com/new](https://vercel.com/new) import the repository and deploy (zero configuration). Note the production URL (e.g. `https://name.vercel.app`).
 4. **CMS**
-   1. In `public/admin/config.yml` imposta `backend.base_url` e `site_url` all'URL di produzione (senza `/` finale).
-   2. Crea una GitHub OAuth App su [github.com/settings/applications/new](https://github.com/settings/applications/new): Homepage URL = URL del sito, Authorization callback URL = `URL-del-sito/api/auth`. Genera un client secret.
-   3. Su Vercel (ambiente Production) aggiungi `OAUTH_CLIENT_ID` e `OAUTH_CLIENT_SECRET`.
-   4. Commit + push → al termine del deploy apri `/admin` e fai "Login with GitHub".
-   5. Chi gestisce i contenuti deve avere un account GitHub con permesso **Write** sulla repo (Settings → Collaborators).
-5. **Form contatti (opzionale)** — su [web3forms.com](https://web3forms.com) crea una access key con l'email che deve ricevere i messaggi; su Vercel → Settings → Environment Variables aggiungi `NEXT_PUBLIC_WEB3FORMS_KEY` (Production, Preview, Development).
-6. **Dominio (opzionale)** — Vercel → Settings → Domains. Poi aggiorna `base_url`/`site_url` in `config.yml` e gli URL della GitHub OAuth App.
+   1. In `public/admin/config.yml` set `backend.base_url` and `site_url` to the production URL (without a trailing `/`).
+   2. Create a GitHub OAuth App at [github.com/settings/applications/new](https://github.com/settings/applications/new): Homepage URL = site URL, Authorization callback URL = `site-URL/api/auth`. Generate a client secret.
+   3. On Vercel (Production environment) add `OAUTH_CLIENT_ID` and `OAUTH_CLIENT_SECRET`.
+   4. Commit + push → once deployed, open `/admin` and click "Login with GitHub".
+   5. Whoever manages the content needs a GitHub account with **Write** permission on the repository (Settings → Collaborators).
+5. **Contact form (optional)** — at [web3forms.com](https://web3forms.com) create an access key with the email that should receive the messages; on Vercel → Settings → Environment Variables add `NEXT_PUBLIC_WEB3FORMS_KEY` (Production, Preview, Development).
+6. **Domain (optional)** — Vercel → Settings → Domains. Then update `base_url`/`site_url` in `config.yml` and the GitHub OAuth App URLs.
 
 </details>
 
 <details>
-<summary><strong>Variabili d'ambiente</strong></summary>
+<summary><strong>Environment variables</strong></summary>
 
 <br>
 
-Modello in [`.env.example`](.env.example). Su Vercel: Settings → Environment Variables; ogni modifica richiede un nuovo deploy.
+Template in [`.env.example`](.env.example). On Vercel: Settings → Environment Variables; every change requires a new deployment.
 
-| Variabile | Ambienti | Note |
+| Variable | Environments | Notes |
 |---|---|---|
-| `NEXT_PUBLIC_WEB3FORMS_KEY` | Production, Preview, Development | Chiave Web3Forms per il form contatti. Pubblica by design (finisce nel bundle client). Se assente, il form è sostituito dal link email. |
-| `OAUTH_CLIENT_ID` | Production | Client ID della GitHub OAuth App per il login a `/admin`. |
-| `OAUTH_CLIENT_SECRET` | Production | Client secret della GitHub OAuth App. **Segreto**: mai in git, mai in chat. |
-| `NEXT_PUBLIC_SITE_URL` | Production (opzionale) | URL canonico. Di norma non serve: su Vercel si usa in automatico il dominio di produzione (`VERCEL_PROJECT_PRODUCTION_URL`). |
+| `NEXT_PUBLIC_WEB3FORMS_KEY` | Production, Preview, Development | Web3Forms key for the contact form. Public by design (it ends up in the client bundle). If missing, the form is replaced by the email link. |
+| `OAUTH_CLIENT_ID` | Production | Client ID of the GitHub OAuth App used to log in to `/admin`. |
+| `OAUTH_CLIENT_SECRET` | Production | Client secret of the GitHub OAuth App. **Secret**: never in git, never in chat. |
+| `NEXT_PUBLIC_SITE_URL` | Production (optional) | Canonical URL. Usually not needed: on Vercel the production domain (`VERCEL_PROJECT_PRODUCTION_URL`) is used automatically. |
 
 </details>
 
 ---
 
 <details>
-<summary><strong>Guida all'utilizzo (CMS)</strong></summary>
+<summary><strong>User guide (CMS)</strong></summary>
 
 <br>
 
-Questa guida è rivolta a chi gestisce i contenuti tramite il pannello di amministrazione web, **senza toccare file, JSON o Git**.
+This guide is for whoever manages the content through the web admin panel, **without touching files, JSON or Git**. The panel is in Italian: labels are shown here as they appear, with a translation.
 
-### Accesso
+### Access
 
-1. Vai su `/admin` del sito (es. `https://nome-artista.vercel.app/admin`), oppure usa il link "Area amministrativa" nel footer.
-2. Clicca **"Login with GitHub"** e autorizza con il tuo account GitHub.
-3. Funziona solo se il tuo account ha permesso **Write** sulla repository.
+1. Go to `/admin` on the site (e.g. `https://artist-name.vercel.app/admin`), or use the "Area amministrativa" (admin area) link in the footer.
+2. Click **"Login with GitHub"** and authorize with your GitHub account.
+3. It only works if your account has **Write** permission on the repository.
 
-### Flusso di lavoro
+### Workflow
 
-Il CMS usa la modalità **Editorial Workflow**: le modifiche non vanno online al salvataggio, ma passano per tre fasi visibili nella scheda **Workflow**:
+The CMS uses the **Editorial Workflow** mode: changes don't go online when you save them; they move through three stages shown in the **Workflow** tab:
 
-1. **Draft** — bozza salvata, non ancora pubblicata.
-2. **In Review** — in revisione (opzionale).
-3. **Ready** — pronta per la pubblicazione.
+1. **Draft** — saved, not published yet.
+2. **In Review** — under review (optional).
+3. **Ready** — ready to publish.
 
-Quando una modifica è in stato Ready, clicca **Publish**: viene salvata su GitHub e parte il deploy su Vercel. Il sito si aggiorna in circa un minuto.
+When a change is Ready, click **Publish**: it is saved to GitHub and a Vercel deployment starts. The site updates in about a minute.
 
-Puoi accumulare più modifiche e pubblicarle insieme. Le bozze sono salvate su GitHub: le ritrovi nella scheda Workflow anche da un altro browser.
+You can collect several changes and publish them together. Drafts are stored on GitHub: you'll find them in the Workflow tab even from another browser.
 
-> ⚠️ Se chiudi la scheda **senza aver cliccato Save**, le modifiche non salvate vanno perse.
+> ⚠️ If you close the tab **without clicking Save**, unsaved changes are lost.
 
-### Sezioni del pannello
+### Panel sections
 
-#### Generali → Impostazioni generali
+#### Generali → Impostazioni generali (General → General settings)
 
-Titolo del sito, nome dell'artista (barra di navigazione, footer, metadati), descrizione per motori di ricerca e anteprime social, tema predefinito (chiaro/scuro).
+Site title, artist name (navigation bar, footer, metadata), description for search engines and social previews, default theme (light/dark).
 
-#### Generali → Bio e contatti
+#### Generali → Bio e contatti (General → Bio and contacts)
 
-- **Biografia:** separa i paragrafi con una riga vuota; `_testo_` diventa corsivo.
-- **Email:** indirizzo mostrato sotto il form di contatto. Non cambia la destinazione dei messaggi del form (legata alla chiave Web3Forms).
-- **Social:** link Instagram e Facebook (lasciare vuoto per nascondere).
-- **Sezioni biografia:** attiva/disattiva testo biografico, "Mostre e partecipazioni" e "Premi".
+- **Biografia (biography):** separate paragraphs with an empty line; `_text_` becomes italic.
+- **Email:** address shown under the contact form. It doesn't change where form messages are delivered (that depends on the Web3Forms key).
+- **Social:** Instagram and Facebook links (leave empty to hide).
+- **Sezioni biografia (biography sections):** turn the biography text, "Mostre e partecipazioni" (exhibitions and participations) and "Premi" (awards) on or off.
 
 #### Generali → Homepage
 
-- **Hero:** nome e sottotitolo; immagini desktop (orizzontali) e mobile (verticali). Due o più immagini → carosello automatico. Se le mobile mancano si usano le desktop.
-- **Sezioni visibili:** attiva o disattiva gallerie, articoli, biografia, CTA esposizioni, contatti, opere in evidenza.
-- **Ordine sezioni:** trascina per cambiare l'ordine in homepage.
-- **CTA Esposizioni:** titolo, descrizione e testo del bottone del banner che porta alla pagina Esposizioni.
+- **Hero:** name and subtitle; desktop (landscape) and mobile (portrait) images. Two or more images → automatic carousel. If mobile images are missing, the desktop ones are used.
+- **Sezioni visibili (visible sections):** turn galleries, articles, biography, exhibitions banner, contacts and featured artworks on or off.
+- **Ordine sezioni (section order):** drag to change the order on the homepage.
+- **CTA Esposizioni (exhibitions banner):** title, description and button text of the banner linking to the Exhibitions page.
 
-#### Mostre e partecipazioni / Premi
+#### Mostre e partecipazioni / Premi (Exhibitions and participations / Awards)
 
-Voci delle due timeline nella biografia: anno + descrizione. Ordinate automaticamente per anno decrescente.
+Entries of the two timelines in the biography: year + description. Automatically sorted by year, newest first.
 
-#### Articoli
+#### Articoli (Articles)
 
-Blocchi editoriali con immagine (o carosello) e testo nella sezione Articoli della homepage. Il campo **Ordine** decide la posizione (numero più basso = prima). Due o più immagini → carosello.
+Editorial blocks with an image (or carousel) and text in the homepage Articles section. The **Ordine** (order) field sets the position (lowest number first). Two or more images → carousel.
 
-#### Esposizioni
+#### Esposizioni (Exhibitions)
 
-Come gli articoli, con in più:
+Like articles, plus:
 
-- **Data inizio** (`2024`, `2024-05` o `2024-05-15`) per ordinare dalla più recente; **Data fine** opzionale.
-- In base alle date il sito mostra da solo il badge **"In corso fino al …"** o **"Dal …"** (mostre future), e per le mostre future il link **"Aggiungi al calendario"**. Lo stato si aggiorna a ogni pubblicazione.
-- **Mostra in homepage:** l'esposizione compare anche nel banner Esposizioni della homepage (più esposizioni → carosello).
+- **Data inizio** (start date: `2024`, `2024-05` or `2024-05-15`) to sort newest first; optional **Data fine** (end date).
+- Based on the dates, the site automatically shows an **"In corso fino al …"** (ongoing until …) or **"Dal …"** (from …, upcoming shows) badge, and for upcoming shows an **"Aggiungi al calendario"** (add to calendar) link. The status updates at every publish.
+- **Mostra in homepage (show on homepage):** the exhibition also appears in the homepage Exhibitions banner (several exhibitions → carousel).
 
-#### Gallerie — Opere
+#### Gallerie — Opere (Galleries — Artworks)
 
-Ogni galleria è una sezione del portfolio con la sua pagina dedicata (`/gallerie/{nome}`).
+Each gallery is a section of the portfolio with its own page (`/gallerie/{name}`).
 
-- **Aggiungere un'opera:** apri la galleria → **Opere** → **+** → carica l'immagine, scrivi la descrizione (obbligatoria, serve all'accessibilità) e, se vuoi, dimensioni (es. `80x60`) e tecnica → Save.
-- **Riordinare:** trascina le voci; l'ordine del pannello è l'ordine sul sito.
-- **In evidenza (homepage):** le opere spuntate alimentano la sezione "In evidenza".
-- **Tecnica:** alimenta il filtro per tecnica nella pagina dedicata (compare con almeno 2 tecniche diverse). Scrivi la stessa tecnica sempre allo stesso modo.
-- **Nuova galleria:** "Gallerie — Opere" → **New Galleria** → **Nome cartella** (solo minuscole, numeri e trattini, es. `scultura`: diventa l'indirizzo `/gallerie/scultura`) → aggiungi le opere → Save. Una galleria senza opere non viene mostrata.
+- **Add an artwork:** open the gallery → **Opere** → **+** → upload the image, write the description (required, used for accessibility) and, optionally, size (e.g. `80x60`) and medium → Save.
+- **Reorder:** drag the entries; the order in the panel is the order on the site.
+- **In evidenza (featured, homepage):** checked artworks feed the "Featured" section.
+- **Tecnica (medium):** feeds the medium filter on the gallery page (shown with at least 2 different media). Always write the same medium the same way.
+- **New gallery:** "Gallerie — Opere" → **New Galleria** → **Nome cartella** (folder name: lowercase letters, digits and hyphens only, e.g. `sculpture`: it becomes the address `/gallerie/sculpture`) → add the artworks → Save. A gallery without artworks is not shown.
 
-> Non cambiare il **Nome cartella** dopo la creazione: è l'indirizzo della pagina. Per cambiare il nome visibile usa il **Titolo** nella configurazione.
+> Don't change the **Nome cartella** after creating the gallery: it is the page address. To change the visible name, use the **Titolo** (title) in the configuration.
 
-#### Gallerie — Configurazione
+#### Gallerie — Configurazione (Galleries — Configuration)
 
-Una voce per galleria, con lo **stesso "Nome cartella"** della scheda Opere (se è diverso la configurazione viene ignorata — nel dubbio copia e incolla):
+One entry per gallery, with the **same "Nome cartella"** as in the Artworks tab (if it differs, the configuration is ignored — when in doubt, copy and paste):
 
-- **Titolo / Sottotitolo:** nome visibile (cambiarlo non cambia l'indirizzo).
-- **Ordine:** posizione in homepage (numeri crescenti, es. 10, 20, 30).
-- **Visibilità:** *Pubblica* (homepage + pagina), *Solo pagina diretta* (fuori dalla homepage ma raggiungibile via link), *Bozza* (nascosta ovunque, pagina 404).
-- **Impaginazione:** *Masonry* (proporzioni originali, ideale per dipinti e disegni) o *Griglia* 3/2 colonne (riquadri 4:3 ritagliati, ideale per fotografie).
-- **Anteprima limitata in homepage** + **Numero opere mostrate:** se attiva, in homepage compaiono solo le prime N opere seguite dal link "Vedi tutte le opere".
-- **Descrizione:** testo libero opzionale.
+- **Titolo / Sottotitolo (title / subtitle):** visible name (changing it doesn't change the address).
+- **Ordine (order):** position on the homepage (ascending numbers, e.g. 10, 20, 30).
+- **Visibilità (visibility):** *Pubblica* (public: homepage + page), *Solo pagina diretta* (direct page only: hidden from the homepage but reachable via link), *Bozza* (draft: hidden everywhere, page returns 404).
+- **Impaginazione (layout):** *Masonry* (original proportions, ideal for paintings and drawings) or *Griglia* 3/2 columns (cropped 4:3 tiles, ideal for photography).
+- **Anteprima limitata in homepage (limited homepage preview)** + **Numero opere mostrate (number of artworks shown):** when on, the homepage shows only the first N artworks followed by a "see all artworks" link.
+- **Descrizione (description):** optional free text.
 
-Nella pagina dedicata di ogni galleria c'è anche il pulsante **"Avvia slideshow"**: proiezione a schermo intero (spazio = pausa, frecce = cambia opera, Esc = esci), utile per fiere e studio visit.
+Each gallery page also has an **"Avvia slideshow"** (start slideshow) button: full-screen presentation (space = pause, arrows = change artwork, Esc = exit), handy for fairs and studio visits.
 
 </details>
 
 <details>
-<summary><strong>Guida all'utilizzo (file system)</strong></summary>
+<summary><strong>User guide (file system)</strong></summary>
 
 <br>
 
-Per chi aggiorna i contenuti direttamente nei file (operazioni in blocco, accesso alla repo).
+For whoever updates the content directly in the files (bulk operations, repository access).
 
 ```
 data/
-  general.json        ← titolo, nome artista, descrizione, tema predefinito
-  bio.json            ← biografia, email, social, sottosezioni della biografia
-  homepage.json       ← hero, sezioni visibili e ordine, banner esposizioni
+  general.json        ← title, artist name, description, default theme
+  bio.json            ← biography, email, social links, biography sub-sections
+  homepage.json       ← hero, visible sections and their order, exhibitions banner
 
 public/assets/
-  hero/desktop/       ← immagini hero orizzontali
-  hero/mobile/        ← immagini hero verticali
-  galleries/{nome}/   ← una cartella per galleria: immagini + gallery.json + gallery-config.json
-  articles/{slug}/    ← article.json + immagini
-  exhibitions/{data}-{slug}/  ← article.json + immagini
-  mostre/{anno}-{slug}/entry.json
-  premi/{anno}-{slug}/entry.json
-  uploads/            ← immagini caricate dal CMS (hero e media generici)
+  hero/desktop/       ← landscape hero images
+  hero/mobile/        ← portrait hero images
+  galleries/{name}/   ← one folder per gallery: images + gallery.json + gallery-config.json
+  articles/{slug}/    ← article.json + images
+  exhibitions/{date}-{slug}/  ← article.json + images
+  mostre/{year}-{slug}/entry.json     ← exhibitions timeline
+  premi/{year}-{slug}/entry.json      ← awards timeline
+  uploads/            ← images uploaded from the CMS (hero and generic media)
 ```
 
-**Gallerie.** Il nome della cartella è l'indirizzo della pagina (`/gallerie/{nome}`, solo `a-z0-9-`).
+**Galleries.** The folder name is the page address (`/gallerie/{name}`, only `a-z0-9-`).
 
-`gallery.json` — elenco delle opere (l'ordine è quello del sito):
+`gallery.json` — list of artworks (order = order on the site):
 
 ```json
 {
@@ -307,7 +309,7 @@ public/assets/
 }
 ```
 
-`gallery-config.json` — impostazioni della galleria (tutti i campi tranne `type`/`nome` sono opzionali):
+`gallery-config.json` — gallery settings (every field except `type`/`nome` is optional):
 
 ```json
 {
@@ -323,43 +325,43 @@ public/assets/
 }
 ```
 
-| Campo | Default | Note |
+| Field | Default | Notes |
 |---|---|---|
-| `title` / `subtitle` | nome cartella leggibile / — | nome visibile |
-| `order` | in fondo | ordine in homepage (crescente) |
-| `visibility` | `public` | `public` · `unlisted` (fuori dalla home, pagina attiva) · `draft` (nascosta, 404) |
+| `title` / `subtitle` | readable folder name / — | visible name |
+| `order` | last | homepage order (ascending) |
+| `visibility` | `public` | `public` · `unlisted` (hidden from the homepage, page active) · `draft` (hidden, 404) |
 | `layout` | `masonry` | `masonry` · `grid-3` · `grid-2` |
-| `enabled` / `limitItems` | `false` / `6` | anteprima limitata in homepage |
-| `description` | — | testo libero |
+| `enabled` / `limitItems` | `false` / `6` | limited homepage preview |
+| `description` | — | free text |
 
-`type` (`"opere"` / `"config"`) serve al CMS per distinguere le due schede: un file senza `type` corretto non compare nel pannello, ma il sito lo mostra comunque.
+`type` (`"opere"` / `"config"`) lets the CMS tell the two tabs apart: a file without the right `type` doesn't show up in the panel, but the site still displays it.
 
-**Articoli ed esposizioni** — `article.json`:
+**Articles and exhibitions** — `article.json`:
 
 ```json
 {
   "date": "2027-04-15",
   "dateEnd": "2027-05-30",
-  "title": "Titolo",
-  "subtitle": "Aprile 2027 · Luogo · Città",
-  "description": "Testo.",
+  "title": "Title",
+  "subtitle": "April 2027 · Venue · City",
+  "description": "Text.",
   "imagePosition": "left",
   "showInHomepage": true,
-  "images": ["01_foto.jpg"],
-  "link": { "text": "Scopri di più", "url": "https://example.com", "newTab": true }
+  "images": ["01_photo.jpg"],
+  "link": { "text": "Learn more", "url": "https://example.com", "newTab": true }
 }
 ```
 
-`date`/`dateEnd`/`showInHomepage` valgono per le esposizioni; gli articoli usano `order` (numero) per l'ordinamento.
+`date`/`dateEnd`/`showInHomepage` apply to exhibitions; articles use `order` (a number) for sorting.
 
-**Mostre e premi** — `entry.json`: `{ "anno": "2024", "description": "Titolo, Luogo, Città" }`.
+**Exhibitions timeline and awards** — `entry.json`: `{ "anno": "2024", "description": "Title, Venue, City" }` (`anno` = year).
 
-**Homepage** — in `data/homepage.json`, `sectionVisibility` decide *se* una sezione appare (deve essere `true`), `sectionOrder` *in che ordine*. Chiavi: `featured`, `galleries`, `articles`, `about`, `exhibitions-cta`, `contact`.
+**Homepage** — in `data/homepage.json`, `sectionVisibility` decides *whether* a section appears (it must be `true`), `sectionOrder` *in which order*. Keys: `featured`, `galleries`, `articles`, `about`, `exhibitions-cta`, `contact`.
 
 </details>
 
 <details>
-<summary><strong>Sviluppo in locale</strong></summary>
+<summary><strong>Local development</strong></summary>
 
 <br>
 
@@ -367,50 +369,50 @@ public/assets/
 npm install
 npm run dev          # http://localhost:3000
 npm run lint
-npm run build        # genera anche miniature e blur delle immagini (prebuild)
-npm run check-setup  # stato della personalizzazione del template
+npm run build        # also generates image thumbnails and blur placeholders (prebuild)
+npm run check-setup  # template customization status
 ```
 
-Il CMS (`/admin`) funziona solo sul dominio di produzione (login GitHub con callback unico).
+The CMS (`/admin`) only works on the production domain (GitHub login with a single callback URL).
 
 </details>
 
 <details>
-<summary><strong>Struttura del progetto</strong></summary>
+<summary><strong>Project structure</strong></summary>
 
 <br>
 
 ```
 app/
-  layout.tsx                  # layout root, font, analytics, JSON-LD Person
-  page.tsx                    # homepage: assembla le sezioni secondo data/homepage.json
-  api/auth/route.ts           # OAuth GitHub per il CMS
-  exhibitions/                # pagina /exhibitions, OG image, export .ics
-  gallerie/[id]/              # pagina dedicata per galleria, OG image
+  layout.tsx                  # root layout, fonts, analytics, JSON-LD Person
+  page.tsx                    # homepage: assembles the sections according to data/homepage.json
+  api/auth/route.ts           # GitHub OAuth for the CMS
+  exhibitions/                # /exhibitions page, OG image, .ics export
+  gallerie/[id]/              # per-gallery page, OG image
   sitemap.ts, robots.ts, opengraph-image.tsx
-  globals.css                 # token colore (chiaro/scuro) e stili globali
+  globals.css                 # color tokens (light/dark) and global styles
 
 components/
-  Nav.tsx / NavClient.tsx     # navigazione: link generati dalle gallerie + client per scroll e menu mobile
+  Nav.tsx / NavClient.tsx     # navigation: links generated from the galleries + client for scroll and mobile menu
   Hero.tsx, Gallery.tsx, Lightbox.tsx, Slideshow.tsx, MediumFilter.tsx, FeaturedWorks.tsx
   Article.tsx, ExhibitionsCta.tsx, ExhibitionsCarousel.tsx, About.tsx, Contact.tsx, Footer.tsx
 
 lib/
-  data.ts                     # lettura file system: hero, gallerie, articoli, esposizioni, mostre, premi
-  site.ts                     # URL del sito (env → dominio di produzione Vercel → localhost)
+  data.ts                     # file system reads: hero, galleries, articles, exhibitions, timelines
+  site.ts                     # site URL (env → Vercel production domain → localhost)
   exhibitionStatus.ts, ics.ts, jsonld.ts, ogAssets.ts, mediums.ts, contactPrefill.ts, theme.tsx
 
-public/admin/                 # Decap CMS: index.html, config.yml, anteprime, logo
+public/admin/                 # Decap CMS: index.html, config.yml, previews, logo
 scripts/
-  generate-thumbs.mjs         # miniature e blur placeholder (prebuild)
-  check-setup.mjs             # stato del setup del template
-.claude/skills/               # skill di setup per Claude Code (/setup e fasi)
-.claude-plugin/marketplace.json # marketplace del plugin (rimosso nelle repo degli artisti)
-plugin/                       # plugin artist-portfolio: skill di avvio /artist-portfolio:setup (rimosso nelle repo degli artisti)
+  generate-thumbs.mjs         # thumbnails and blur placeholders (prebuild)
+  check-setup.mjs             # template setup status
+.claude/skills/               # Claude Code setup skills (/setup and phases)
+.claude-plugin/marketplace.json # plugin marketplace (removed in artists' repositories)
+plugin/                       # artist-portfolio plugin: kickoff skill /artist-portfolio:setup (removed in artists' repositories)
 ```
 
 </details>
 
 ---
 
-Rilasciato con licenza [MIT](LICENSE). Immagini di esempio: fotografie da [Unsplash](https://unsplash.com) tramite [Lorem Picsum](https://picsum.photos), usate come segnaposto.
+Released under the [MIT](LICENSE) license. Sample images: photos from [Unsplash](https://unsplash.com) via [Lorem Picsum](https://picsum.photos), used as placeholders.

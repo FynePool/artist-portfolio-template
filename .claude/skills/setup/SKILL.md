@@ -156,5 +156,5 @@ verifica con l'utente che risultino attivi. Se no: `[-]`.
   ✗ o passaggi aperti, **non chiudere**: torna al primo passaggio aperto.
 - **8.2** Riepilogo per l'utente: URL del sito, URL del CMS (`/admin`), chi ha accesso in scrittura,
   passaggi `[-]` scelti (es. niente form o dominio) e come attivarli in futuro (`/setup-contact-form`,
-  `/setup-domain`), guida per chi gestisce i contenuti (README → "Guida all'utilizzo (CMS)").
+  `/setup-domain`), guida per chi gestisce i contenuti (README → "User guide (CMS)").
   Committa e pusha il registro finale.

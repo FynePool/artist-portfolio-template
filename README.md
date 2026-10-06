@@ -23,19 +23,24 @@ Contenuti di esempio inclusi (testi lorem ipsum, immagini stock, gallerie `secti
 
 ## Avvio rapido (con Claude)
 
-### Opzione A — plugin `artist-portfolio` (consigliata)
+### Opzione A — plugin **Artist Portfolio** (consigliata)
 
-Il plugin crea tutto partendo da zero: verifica i requisiti, crea la tua repo **privata** dal template, crea il progetto Vercel con il nome che scegli (`nome.vercel.app`) e mette il sito online. Poi ti indica come proseguire con `/setup` dentro la repo.
+Il plugin è disponibile nella [directory dei plugin di Claude](https://claude.ai/directory): crea tutto partendo da zero. Verifica i requisiti, crea la tua repo **privata** dal template, crea il progetto Vercel con il nome che scegli (`nome.vercel.app`) e mette il sito online. Poi ti indica come proseguire con `/setup` dentro la repo.
 
-In [Claude Code](https://claude.com/claude-code) (terminale o app desktop):
+**Installazione dalla directory (nessun marketplace da aggiungere):**
+
+1. Su claude.ai o nell'app desktop apri **Customize → Plugins → Discover**, cerca **Artist Portfolio** e aggiungilo. In Claude Code puoi anche sfogliare la directory con `/plugin directory`.
+2. Il plugin funziona in chat, in Cowork e in Claude Code, dove arriva sincronizzato dal tuo account (`artist-portfolio@synced`). Gli aggiornamenti arrivano da soli.
+3. Avvialo scrivendo `/artist-portfolio:setup`, oppure chiedendo a Claude di creare un nuovo portfolio d'artista.
+
+**In alternativa, da questa repo in Claude Code** (terminale o app desktop):
 
 ```
-/plugin marketplace add FynePool/artist-portfolio-template
-/plugin install artist-portfolio@artist-portfolio-template
+/plugin install artist-portfolio --marketplace FynePool/artist-portfolio-template
 /artist-portfolio:setup
 ```
 
-In alternativa aggiungi la repo come marketplace da claude.ai (**Customize → Plugins**): il plugin funziona anche in chat e in Cowork e si sincronizza in Claude Code. Il setup completo, dopo l'avvio, richiede comunque Claude Code (sul computer o nel cloud).
+Il setup completo, dopo l'avvio, richiede comunque Claude Code (sul computer o nel cloud). Il plugin risponde nella lingua dell'utente; il sito generato e il setup dentro la repo sono per ora in italiano.
 
 ### Opzione B — template manuale
 

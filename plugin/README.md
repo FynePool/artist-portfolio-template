@@ -43,4 +43,4 @@ segreti, e non crea account per tuo conto.
 - Account GitHub personale e account Vercel (il piano gratuito Hobby va bene per un sito vetrina non commerciale).
 - Claude Code (terminale, app desktop o cloud) per il setup completo dopo l'avvio.
 
-Licenza MIT.
+Licenza MIT · [Privacy](PRIVACY.md) · [Supporto](https://github.com/FynePool/artist-portfolio-template/issues)

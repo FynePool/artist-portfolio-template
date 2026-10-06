@@ -9,6 +9,14 @@
   },
   "homepage": "https://github.com/FynePool/artist-portfolio-template",
   "repository": "https://github.com/FynePool/artist-portfolio-template",
+  "privacyPolicyUrl": "https://github.com/FynePool/artist-portfolio-template/blob/main/plugin/PRIVACY.md",
+  "supportUrl": "https://github.com/FynePool/artist-portfolio-template/issues",
   "license": "MIT",
-  "keywords": ["portfolio", "artist", "nextjs", "vercel", "decap-cms"]
+  "keywords": [
+    "portfolio",
+    "artist",
+    "nextjs",
+    "vercel",
+    "decap-cms"
+  ]
 }

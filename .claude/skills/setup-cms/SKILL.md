@@ -1,9 +1,9 @@
 ---
 name: setup-cms
-description: Configura il login al CMS Decap (/admin) del portfolio — GitHub OAuth App, variabili OAUTH_CLIENT_ID/OAUTH_CLIENT_SECRET su Vercel, config.yml (repo e URL) — e dà accesso in scrittura a chi gestisce i contenuti. Usala nella fase 5 di /setup o se il login a /admin non funziona.
+description: Fase 4 di /setup (passaggi 4.1–4.10) — configura il login al CMS Decap (/admin) del portfolio con GitHub OAuth App, variabili OAUTH_CLIENT_ID/OAUTH_CLIENT_SECRET su Vercel e config.yml, poi dà accesso in scrittura a chi gestisce i contenuti. Usala anche se il login a /admin non funziona.
 ---
 
-# Login al CMS e accesso per chi gestisce i contenuti
+# Fase 4 — Login al CMS e accesso per chi gestisce i contenuti
 
 ## Come funziona (spiegalo in breve all'utente)
 
@@ -13,90 +13,119 @@ description: Configura il login al CMS Decap (/admin) del portfolio — GitHub O
 per salvare deve avere **permesso di scrittura sulla repo**. Ogni pubblicazione è un commit su
 `main` → Vercel ridistribuisce il sito.
 
-Prerequisiti: repo (`/setup-repo`) e URL di produzione (`/setup-vercel`).
-Di seguito `SITE` = URL di produzione senza `/` finale (es. `https://nome-artista.vercel.app`).
+Prerequisiti: 1.2 e 3.3 chiusi. `SITE` = URL di produzione registrato al 3.3, senza `/` finale.
+Se sei stato invocato da `/setup`, aggiorna `setup-progress.md` dopo ogni passaggio.
 
-## 1. config.yml — lo faccio io
+## 4.1 config.yml — AUTO
 
-In `public/admin/config.yml`:
+In `public/admin/config.yml`: `backend.base_url: SITE` e `site_url: SITE`
+(verifica anche `backend.repo` = OWNER/NOME e `backend.branch: main`). Il commit avviene al 4.6.
 
-```yaml
-backend:
-  repo: OWNER/NOME          # repo GitHub del sito
-  branch: main
-  base_url: SITE            # dove gira /api/auth
-site_url: SITE
-```
-
-## 2. GitHub OAuth App
+## 4.2 GitHub OAuth App — MISTO
 
 GitHub non permette di creare OAuth App via API: è un passaggio da interfaccia web.
 
 - Account personale: https://github.com/settings/applications/new
-- Repo di un'organizzazione: meglio creare l'app nell'organizzazione,
+- Repo di un'organizzazione: meglio crearla nell'organizzazione,
   `https://github.com/organizations/ORG/settings/applications/new`
-
-Campi:
 
 | Campo | Valore |
 |---|---|
 | Application name | es. `Portfolio NOME ARTISTA — CMS` |
 | Homepage URL | `SITE` |
 | Authorization callback URL | `SITE/api/auth` |
-| Enable Device Flow | lasciare spento |
+| Enable Device Flow | spento |
 
-**Lo faccio io (browser)**: con Claude in Chrome o il browser integrato puoi aprire la pagina
-(l'utente deve essere già loggato su GitHub: il login lo fa lui) e compilare questi tre campi,
-che non sono segreti. Il click su **Register application** fallo fare all'utente, o fallo tu
-solo dopo sua conferma esplicita.
+- **Lo faccio io (browser)**: con Claude in Chrome o il browser integrato apri la pagina (il login
+  a GitHub lo fa l'utente) e compila questi campi, che non sono segreti. **Register application**
+  lo clicca l'utente, o tu solo dopo sua conferma esplicita.
+- **Passo passo**: dai all'utente la tabella sopra e attendi conferma.
 
-Poi, nella pagina dell'app:
-- **Client ID**: visibile in pagina, non è segreto → puoi leggerlo tu (browser) o farlo copiare.
-- **Generate a new client secret**: lo genera e lo copia **l'utente**. Il secret non deve passare
-  da te: non chiederlo in chat, non leggerlo dallo schermo, non inserirlo tu in nessun campo.
+## 4.3 Client secret — MANUALE (sempre)
 
-## 3. Variabili su Vercel (ambiente Production)
+Nella pagina dell'app l'utente clicca **Generate a new client secret** e lo tiene da parte per il 4.5.
+Il secret non deve passare da te: non chiederlo in chat, non leggerlo dallo schermo, non inserirlo
+tu in nessun campo, non scriverlo nel registro.
 
-- `OAUTH_CLIENT_ID` → **lo faccio io**: connettore Vercel (crea env sul progetto, target production)
-  oppure CLI: `printf '%s' "CLIENT_ID" | vercel env add OAUTH_CLIENT_ID production`.
-- `OAUTH_CLIENT_SECRET` → **lo fa l'utente**, a scelta:
-  - dashboard: Vercel → progetto → Settings → Environment Variables → `OAUTH_CLIENT_SECRET`,
-    ambiente Production, tipo Sensitive → Save;
-  - oppure nel proprio terminale (il valore viene chiesto in modo nascosto):
-    ```bash
-    vercel env add OAUTH_CLIENT_SECRET production
-    ```
+## 4.4 `OAUTH_CLIENT_ID` su Vercel — AUTO
 
-## 4. Pubblica
+Il Client ID è visibile nella pagina dell'app e non è segreto: leggilo dal browser o fattelo copiare.
+- Connettore Vercel: crea la variabile sul progetto, target Production.
+- CLI: `printf '%s' "CLIENT_ID" | vercel env add OAUTH_CLIENT_ID production`
 
-Committa `public/admin/config.yml`, pusha su `main` (previa conferma) e attendi il deploy.
-Se le env sono state aggiunte dopo l'ultimo deploy, serve comunque un nuovo deploy.
+## 4.5 `OAUTH_CLIENT_SECRET` su Vercel — MANUALE (sempre)
 
-## 5. Test
+L'utente, a scelta:
+- dashboard: Vercel → progetto → Settings → Environment Variables → nome `OAUTH_CLIENT_SECRET`,
+  ambiente **Production**, tipo Sensitive → Save;
+- oppure nel proprio terminale (il valore viene chiesto in modo nascosto):
+  ```bash
+  vercel env add OAUTH_CLIENT_SECRET production
+  ```
+Attendi la sua conferma; la verifica tecnica arriva al 4.7.
 
-Apri `SITE/admin` → **Login with GitHub** → Authorize → deve comparire il pannello con le
-collezioni (Generali, Gallerie — Opere, Esposizioni…).
+## 4.6 Commit, push, nuovo deploy — AUTO
+
+Committa `public/admin/config.yml` (+ `setup-progress.md`) e pusha su `main` previa conferma.
+Il push genera il deploy, che include anche le variabili appena aggiunte. Attendi lo stato Ready.
+(Se le variabili sono state aggiunte dopo l'ultimo deploy e non c'è nulla da pushare: redeploy
+da dashboard, connettore o `vercel deploy --prod`.)
+
+## 4.7 Verifica tecnica — AUTO
+
+```bash
+npm run check-setup
+```
+
+Nella sezione "Produzione" devono comparire: `✓ config.yml del CMS pubblicato e aggiornato` e
+`✓ /api/auth reindirizza a GitHub`. Se no, vedi la tabella dei problemi qui sotto.
+
+## 4.8 Login reale — MANUALE
+
+L'utente apre `SITE/admin` → **Login with GitHub** → Authorize → deve vedere il pannello con le
+collezioni (Generali, Gallerie — Opere, Esposizioni…). Chiedigli conferma.
 
 | Sintomo | Causa probabile |
 |---|---|
-| Pagina "Errore di configurazione: variabili OAUTH_CLIENT_ID o OAUTH_CLIENT_SECRET mancanti" | env mancanti in Production o deploy precedente alla loro aggiunta |
-| GitHub: "The redirect_uri is not associated with this application" | callback URL dell'OAuth App diverso da `SITE/api/auth` (https, www, dominio) |
+| "Errore di configurazione: variabili OAUTH_CLIENT_ID o OAUTH_CLIENT_SECRET mancanti" | env mancanti in Production o deploy precedente alla loro aggiunta |
+| GitHub: "The redirect_uri is not associated with this application" | callback dell'OAuth App diverso da `SITE/api/auth` (https, www, dominio) |
 | "Errore OAuth GitHub: bad_verification_code / incorrect_client_credentials" | secret o client ID sbagliati / rigenerati |
-| Login ok ma errori nel caricare le collezioni / "Not Found" | `backend.repo` errato, oppure l'utente non ha accesso in scrittura alla repo |
+| Login ok ma errori nel caricare le collezioni / "Not Found" | `backend.repo` errato, oppure l'account non ha accesso in scrittura alla repo |
 | Repo di organizzazione: login ok ma repo invisibile | l'organizzazione limita le OAuth App: Org → Settings → Third-party access → approva l'app |
 | Popup bloccato | consentire i popup per il sito e riprovare (index.html gestisce anche il fallback) |
 
-## 6. Accesso per chi gestisce i contenuti
+## 4.9 Accesso per chi gestisce i contenuti — AUTO (con conferma)
 
-Serve un account GitHub (gratuito) con permesso **Write** sulla repo.
+Chiedi chi gestirà i contenuti. Se è l'utente stesso (già proprietario della repo): chiudi con
+`✔ gestore = proprietario`. Altrimenti serve un account GitHub (gratuito) con permesso **Write**:
 
 - **Lo faccio io (GitHub CLI)**, previa conferma (GitHub invia un invito via email):
   ```bash
   gh api -X PUT repos/OWNER/NOME/collaborators/USERNAME -f permission=push
   ```
-- **Passo passo**: repo → Settings → Collaborators (o Collaborators and teams) → Add people →
-  username → ruolo Write.
+- **Passo passo**: repo → Settings → Collaborators → Add people → username → ruolo Write.
 
-La persona accetta l'invito (email o `https://github.com/OWNER/NOME/invitations`), poi entra da
-`SITE/admin`. Indicale la sezione "Guida all'utilizzo (CMS)" del README: il CMS usa il flusso
-editoriale (Draft → In Review → Ready → **Publish**); solo Publish manda online.
+## 4.10 Invito accettato e primo login del gestore — MANUALE
+
+La persona accetta l'invito (email o `https://github.com/OWNER/NOME/invitations`) e fa login da
+`SITE/admin`. Può richiedere tempo: annota `⏳ in attesa del gestore` e prosegui con le fasi
+successive, tornando qui prima della chiusura. Verifica: `gh api repos/OWNER/NOME/collaborators/USERNAME`
+risponde 204 (invito accettato) e il gestore conferma il login.
+Indicagli la sezione "Guida all'utilizzo (CMS)" del README: il CMS usa il flusso editoriale
+(Draft → In Review → Ready → **Publish**); solo Publish manda online.
+Se gestore = proprietario: `✔ coincide con 4.8`.
+
+## Criteri di completamento
+
+| Passaggio | Chiudi con `[x]` solo se |
+|---|---|
+| 4.1 | `check-setup` mostra `✓ base_url → SITE` |
+| 4.2 | l'utente conferma l'app creata; Homepage e callback coincidono con la tabella |
+| 4.3 | l'utente conferma di aver generato il secret (senza mostrarlo) |
+| 4.4 | la variabile risulta nel progetto (connettore/`vercel env ls production`: solo il nome) |
+| 4.5 | conferma dell'utente; verifica tecnica al 4.7 |
+| 4.6 | commit su `origin/main` e deploy Ready |
+| 4.7 | `check-setup`: config.yml pubblicato ✓ e `/api/auth` → GitHub ✓ |
+| 4.8 | l'utente vede il pannello dopo il login |
+| 4.9 | collaboratore invitato (o gestore = proprietario) |
+| 4.10 | collaboratore attivo (204) e login confermato (o gestore = proprietario) |

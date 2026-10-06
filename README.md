@@ -35,16 +35,79 @@ Contenuti di esempio inclusi (testi lorem ipsum, immagini stock, gallerie `secti
    /setup
    ```
 
-La skill `/setup` controlla quali strumenti hai a disposizione (GitHub CLI, Vercel CLI o connettore Vercel, browser, connettore Gmail), verifica lo stato del progetto con `npm run check-setup` e ti accompagna fase per fase. Per ogni passaggio propone di farlo direttamente oppure ti dà le istruzioni passo passo; le azioni esterne (creare repo, deploy, variabili, inviti) partono solo dopo la tua conferma.
+La skill `/setup` controlla quali strumenti hai a disposizione (GitHub CLI, Vercel CLI o connettore Vercel, browser, connettore Gmail) e ti porta attraverso **tutti** i passaggi, nell'ordine, tenendo un registro in `setup-progress.md`: un passaggio viene segnato come fatto solo dopo una verifica, e quelli opzionali si saltano solo con un tuo "no" esplicito. Se interrompi, alla volta successiva `/setup` riprende dal primo passaggio aperto. Le azioni esterne (creare repo, deploy, variabili, inviti, invio di form) partono solo dopo la tua conferma.
 
-| Fase | Skill | Cosa fa | Chi lo fa |
-|---|---|---|---|
-| 1. Repo | `/setup-repo` | Crea/collega la repo GitHub, imposta `backend.repo` del CMS | Claude (con `gh`) o tu |
-| 2. Contenuti | `/setup-content` | Nome artista, bio, email, social, sezioni (rinomina `section1..N`), opere, hero, icone, colori | Claude, con i tuoi testi e immagini |
-| 3. Form contatti | `/setup-contact-form` | Chiave Web3Forms → `NEXT_PUBLIC_WEB3FORMS_KEY` | Tu richiedi la chiave; Claude può recuperarla da Gmail e impostarla |
-| 4. Deploy | `/setup-vercel` | Progetto Vercel collegato a GitHub, variabili, primo deploy, URL | Claude (CLI o connettore Vercel) o tu da dashboard |
-| 5. CMS | `/setup-cms` | GitHub OAuth App, `OAUTH_CLIENT_ID` / `OAUTH_CLIENT_SECRET`, `config.yml`, accesso per chi gestisce i contenuti | Misto: il client secret lo inserisci **solo tu** |
-| 6. Dominio | `/setup-domain` | Dominio personalizzato e riallineamento di CMS e OAuth | Opzionale |
+| Fase | Skill | Contenuto |
+|---|---|---|
+| 0. Prerequisiti | `/setup` | Account, strumenti, raccolta informazioni |
+| 1. Repository | `/setup-repo` | Repo GitHub propria, `backend.repo` del CMS |
+| 2. Contenuti | `/setup-content` | Nome, bio, sezioni (al posto di `section1..N`), opere, esempi, hero, icone, colori |
+| 3. Deploy | `/setup-vercel` | Progetto Vercel collegato a GitHub, primo deploy, URL di produzione |
+| 4. CMS | `/setup-cms` | GitHub OAuth App, variabili OAuth, login a `/admin`, accesso per chi gestisce i contenuti |
+| 5. Form contatti (opzionale) | `/setup-contact-form` | Chiave Web3Forms, variabile, invio di prova |
+| 6. Dominio (opzionale) | `/setup-domain` | Dominio personalizzato e riallineamento di CMS e OAuth |
+| 7. Statistiche (opzionale) | `/setup` | Vercel Web Analytics e Speed Insights |
+| 8. Chiusura | `/setup` | Verifica finale e riepilogo |
+
+<details>
+<summary><strong>Tutti i passaggi del setup: chi fa cosa</strong></summary>
+
+<br>
+
+**Auto** = lo fa Claude (con la tua conferma per le azioni esterne) · **Manuale** = lo fai tu · **Misto** = Claude prepara o verifica, tu completi. Dove è indicata un'alternativa ("Manuale se…"), dipende dagli strumenti disponibili.
+
+| # | Passaggio | Chi |
+|---|---|---|
+| 0.1 | Codice del template in locale, aperto in Claude Code | Manuale |
+| 0.2 | `npm install` | Auto |
+| 0.3 | Account GitHub (tuo e di chi gestirà i contenuti) | Manuale |
+| 0.4 | Account Vercel | Manuale |
+| 0.5 | Login GitHub CLI (`gh auth login`) o scelta della strada manuale | Manuale |
+| 0.6 | Vercel CLI aggiornata (Auto) e login `vercel login` o autorizzazione connettore (Manuale) | Misto |
+| 0.7 | Risposte alle domande iniziali (nome, sezioni, email, gestore, dominio) | Manuale |
+| 1.1 | Creazione repo GitHub propria | Auto (Manuale se manca la GitHub CLI) |
+| 1.2 | `backend.repo` nel CMS, commit e push | Auto |
+| 2.1 | Identità: nome, titolo, descrizione, tema | Auto (testi forniti da te) |
+| 2.2 | Hero: nome, sottotitolo, immagini | Auto (immagini fornite da te) |
+| 2.3 | Biografia, email, social | Auto (testi forniti da te) |
+| 2.4 | Sezioni al posto di `section1..N` | Auto |
+| 2.5 | Opere nelle gallerie | Auto con i tuoi file, oppure Manuale dal CMS |
+| 2.6 | Esposizioni, articoli, mostre, premi di esempio | Auto |
+| 2.7 | Icona e logo | Auto |
+| 2.8 | Colori e font | Auto |
+| 2.9 | Build, anteprima locale (la approvi tu), commit e push | Misto |
+| 3.1 | Progetto Vercel collegato alla repo | Auto (Manuale da dashboard, o per autorizzare l'app GitHub di Vercel) |
+| 3.2 | Primo deploy | Auto |
+| 3.3 | URL di produzione | Auto |
+| 3.4 | Verifica sito online | Auto |
+| 4.1 | URL di produzione nel `config.yml` del CMS | Auto |
+| 4.2 | Creazione GitHub OAuth App | Misto (Claude compila i campi nel browser, tu registri) |
+| 4.3 | Generazione client secret | **Manuale, sempre** |
+| 4.4 | `OAUTH_CLIENT_ID` su Vercel | Auto |
+| 4.5 | `OAUTH_CLIENT_SECRET` su Vercel | **Manuale, sempre** (il segreto non passa da Claude) |
+| 4.6 | Commit, push, nuovo deploy | Auto |
+| 4.7 | Verifica tecnica `/api/auth` e `config.yml` pubblicato | Auto |
+| 4.8 | Primo login a `/admin` | Manuale |
+| 4.9 | Invito di chi gestisce i contenuti come collaboratore | Auto |
+| 4.10 | Accettazione invito e primo login del gestore | Manuale (il gestore) |
+| 5.1 | Decisione: form sì/no | Manuale |
+| 5.2 | Richiesta access key Web3Forms | Misto (Claude compila il form nel browser con conferma) |
+| 5.3 | Recupero chiave dalla mail | Auto con connettore Gmail, altrimenti Manuale |
+| 5.4 | `NEXT_PUBLIC_WEB3FORMS_KEY` su Vercel e `.env.local` | Auto |
+| 5.5 | Nuovo deploy e verifica form attivo | Auto |
+| 5.6 | Messaggio di prova inviato e ricevuto | Misto |
+| 6.1 | Decisione: dominio sì/no | Manuale |
+| 6.2 | Acquisto dominio | Manuale |
+| 6.3 | Dominio aggiunto al progetto Vercel | Auto |
+| 6.4 | Record DNS dal registrar | Manuale (verifica Auto) |
+| 6.5 | `config.yml` sul nuovo dominio | Auto |
+| 6.6 | URL della GitHub OAuth App aggiornati | Misto |
+| 6.7 | Verifica e login sul nuovo dominio | Misto |
+| 7.1 | Abilitare Analytics e Speed Insights | Manuale (dashboard Vercel) |
+| 8.1 | Verifica finale `check-setup` | Auto |
+| 8.2 | Riepilogo finale | Auto |
+
+</details>
 
 Puoi lanciare le singole skill anche separatamente, ad esempio `/setup-content` per aggiornare i contenuti in un secondo momento.
 
@@ -64,13 +127,13 @@ npm run check-setup
 1. **Repo** — crea la repo da "Use this template", clonala, `npm install`. In `public/admin/config.yml` imposta `backend.repo: TUO-ACCOUNT/TUA-REPO`.
 2. **Contenuti** — modifica `data/general.json` (`siteTitle`, `artistName`, `description`, `defaultTheme`), `data/bio.json` (bio, email, social), `data/homepage.json` (hero, sezioni). Rinomina le cartelle `public/assets/galleries/section1..3` con il nome delle tue sezioni (solo `a-z`, `0-9`, `-`) e aggiorna `nome` e i percorsi `file` nei due JSON di ogni galleria. Sostituisci immagini hero, opere, esposizioni, `app/icon.svg` e `public/admin/logo.svg` (rimuovi il commento `template-default-icon`). Tutti i contenuti si possono anche cambiare dopo dal CMS.
 3. **Vercel** — su [vercel.com/new](https://vercel.com/new) importa la repo e fai Deploy (zero configurazione). Annota l'URL di produzione (es. `https://nome.vercel.app`).
-4. **Form contatti (opzionale)** — su [web3forms.com](https://web3forms.com) crea una access key con l'email che deve ricevere i messaggi; su Vercel → Settings → Environment Variables aggiungi `NEXT_PUBLIC_WEB3FORMS_KEY` (Production, Preview, Development).
-5. **CMS**
+4. **CMS**
    1. In `public/admin/config.yml` imposta `backend.base_url` e `site_url` all'URL di produzione (senza `/` finale).
    2. Crea una GitHub OAuth App su [github.com/settings/applications/new](https://github.com/settings/applications/new): Homepage URL = URL del sito, Authorization callback URL = `URL-del-sito/api/auth`. Genera un client secret.
    3. Su Vercel (ambiente Production) aggiungi `OAUTH_CLIENT_ID` e `OAUTH_CLIENT_SECRET`.
    4. Commit + push → al termine del deploy apri `/admin` e fai "Login with GitHub".
    5. Chi gestisce i contenuti deve avere un account GitHub con permesso **Write** sulla repo (Settings → Collaborators).
+5. **Form contatti (opzionale)** — su [web3forms.com](https://web3forms.com) crea una access key con l'email che deve ricevere i messaggi; su Vercel → Settings → Environment Variables aggiungi `NEXT_PUBLIC_WEB3FORMS_KEY` (Production, Preview, Development).
 6. **Dominio (opzionale)** — Vercel → Settings → Domains. Poi aggiorna `base_url`/`site_url` in `config.yml` e gli URL della GitHub OAuth App.
 
 </details>
@@ -325,4 +388,4 @@ scripts/
 
 ---
 
-Immagini di esempio: fotografie da [Unsplash](https://unsplash.com) tramite [Lorem Picsum](https://picsum.photos), usate come segnaposto.
+Rilasciato con licenza [MIT](LICENSE). Immagini di esempio: fotografie da [Unsplash](https://unsplash.com) tramite [Lorem Picsum](https://picsum.photos), usate come segnaposto.

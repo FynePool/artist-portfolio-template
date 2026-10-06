@@ -13,7 +13,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 A new project created from this template is configured through project skills in [.claude/skills/](.claude/skills/):
 
 - `/setup` — orchestrator: inventories available tools (gh, Vercel CLI/connector, browser, Gmail), runs `npm run check-setup`, then runs the phases below in dependency order.
-- `/setup-repo` → `/setup-content` → `/setup-contact-form` → `/setup-vercel` → `/setup-cms` → `/setup-domain` (optional).
+- `/setup-repo` → `/setup-content` → `/setup-vercel` → `/setup-cms` → `/setup-contact-form` (optional) → `/setup-domain` (optional).
+- The canonical numbered step list is [.claude/skills/setup/progress-template.md](.claude/skills/setup/progress-template.md); `/setup` copies it to `setup-progress.md` (project root) and marks a step `[x]` only with verification evidence. `check-setup` parses that file and lists open steps. Keep step IDs consistent across the template, the phase skills and the README table.
 
 `npm run check-setup` ([scripts/check-setup.mjs](scripts/check-setup.mjs)) is read-only and reports what is still template-default (artist name, placeholder galleries/samples, stock hero, default icon marker, CMS placeholders `OWNER/REPO` / `YOUR-SITE`, git origin still pointing at the template). Keep it in sync when adding new template placeholders.
 

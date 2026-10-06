@@ -1,9 +1,12 @@
 /**
  * Stato del setup iniziale del template: cosa è già personalizzato e cosa manca.
- * Run via: npm run check-setup
+ * Run via: npm run check-setup            (controlli locali + remoti sul sito di produzione)
+ *          npm run check-setup -- --offline (solo controlli locali)
  *
  * Solo lettura: non modifica nulla e non stampa mai valori di variabili d'ambiente.
- * Usato dalla skill /setup (.claude/skills/setup) per decidere da dove ripartire.
+ * I controlli remoti sono semplici GET verso l'URL di produzione letto da config.yml.
+ * Legge anche setup-progress.md (registro dei passaggi tenuto dalla skill /setup) ed
+ * elenca i passaggi non ancora completati, inclusi quelli manuali non verificabili da qui.
  */
 
 import fs from 'fs'
@@ -117,7 +120,6 @@ if (!cmsBaseUrl || cmsBaseUrl.includes('YOUR-SITE')) {
 } else {
   add('ok', 'CMS', `base_url → ${cmsBaseUrl}`)
 }
-add('info', 'CMS', 'OAUTH_CLIENT_ID / OAUTH_CLIENT_SECRET vanno impostate su Vercel (Production): non verificabile da qui.', '/setup-cms')
 
 // ── Vercel ──────────────────────────────────────────────────────────────────
 const vercelProject = readJson('.vercel/project.json')
@@ -127,12 +129,102 @@ if (vercelProject) {
   add('info', 'Vercel', 'Nessun .vercel/project.json: progetto non collegato con la CLI (ok se gestito da dashboard o connettore).', '/setup-vercel')
 }
 
-// ── Form contatti ───────────────────────────────────────────────────────────
+// ── Form contatti (locale) ──────────────────────────────────────────────────
 const envLocal = read('.env.local') ?? ''
 if (/^NEXT_PUBLIC_WEB3FORMS_KEY=\S+/m.test(envLocal)) {
-  add('ok', 'Form contatti', 'NEXT_PUBLIC_WEB3FORMS_KEY presente in .env.local (verifica anche su Vercel).')
+  add('ok', 'Form contatti', 'NEXT_PUBLIC_WEB3FORMS_KEY presente in .env.local.')
 } else {
-  add('warn', 'Form contatti', 'NEXT_PUBLIC_WEB3FORMS_KEY assente in .env.local: in locale il form mostra solo il link email.', '/setup-contact-form')
+  add('info', 'Form contatti', 'NEXT_PUBLIC_WEB3FORMS_KEY assente in .env.local: in locale il form mostra solo il link email.', '/setup-contact-form')
+}
+
+// ── Produzione (controlli remoti) ───────────────────────────────────────────
+const OFFLINE = process.argv.includes('--offline')
+const site = cmsBaseUrl && !cmsBaseUrl.includes('YOUR-SITE') ? cmsBaseUrl.replace(/\/+$/, '') : null
+
+async function get(url) {
+  try {
+    const res = await fetch(url, { redirect: 'manual', signal: AbortSignal.timeout(10000) })
+    const isRedirect = res.status >= 300 && res.status < 400
+    return { status: res.status, location: res.headers.get('location') ?? '', text: isRedirect ? '' : await res.text() }
+  } catch {
+    return null
+  }
+}
+
+if (!site) {
+  add('info', 'Produzione', 'Controlli remoti non eseguiti: URL di produzione non ancora in config.yml (base_url).', '/setup-vercel')
+} else if (OFFLINE) {
+  add('info', 'Produzione', 'Controlli remoti saltati (--offline).')
+} else {
+  const home = await get(`${site}/`)
+  if (!home) {
+    add('todo', 'Produzione', `${site} non raggiungibile.`, '/setup-vercel')
+  } else if (home.status !== 200) {
+    add('todo', 'Produzione', `${site} risponde ${home.status}${home.location ? ` → ${home.location}` : ''}: base_url deve essere il dominio principale, senza redirect.`, '/setup-vercel')
+  } else {
+    add('ok', 'Produzione', `${site} online.`)
+    if (home.text.includes('Nome Artista')) {
+      add('warn', 'Produzione', 'Il sito online mostra ancora "Nome Artista": contenuti non pubblicati o deploy non aggiornato.', '/setup-content')
+    }
+    if (home.text.includes('name="botcheck"')) {
+      add('ok', 'Produzione', 'Form contatti attivo (chiave Web3Forms presente nel build).')
+    } else if (home.text.includes('id="contatti"')) {
+      add('warn', 'Produzione', 'Form contatti NON attivo: NEXT_PUBLIC_WEB3FORMS_KEY assente nel build di produzione (o form non voluto).', '/setup-contact-form')
+    }
+  }
+
+  const sitemap = await get(`${site}/sitemap.xml`)
+  if (sitemap?.status === 200 && sitemap.text.includes('localhost')) {
+    add('warn', 'Produzione', 'La sitemap usa localhost: URL del sito non risolto al build.', '/setup-vercel')
+  }
+
+  const cfg = await get(`${site}/admin/config.yml`)
+  if (!cfg || cfg.status !== 200) {
+    add('todo', 'Produzione', 'config.yml del CMS non raggiungibile su /admin/config.yml.', '/setup-cms')
+  } else if (cfg.text.includes('OWNER/REPO') || cfg.text.includes('YOUR-SITE')) {
+    add('todo', 'Produzione', 'Il config.yml pubblicato contiene ancora i segnaposto: serve commit + push + deploy.', '/setup-cms')
+  } else if (cmsRepo && !cfg.text.includes(`repo: ${cmsRepo}`)) {
+    add('warn', 'Produzione', 'Il config.yml pubblicato è diverso da quello locale: deploy non aggiornato?', '/setup-cms')
+  } else {
+    add('ok', 'Produzione', 'config.yml del CMS pubblicato e aggiornato.')
+  }
+
+  const auth = await get(`${site}/api/auth`)
+  if (auth && auth.status >= 300 && auth.status < 400 && auth.location.startsWith('https://github.com/login/oauth/authorize')) {
+    add('ok', 'Produzione', '/api/auth reindirizza a GitHub: OAUTH_CLIENT_ID e OAUTH_CLIENT_SECRET presenti in Production.')
+    const redirectUri = new URL(auth.location).searchParams.get('redirect_uri')
+    if (redirectUri && redirectUri !== `${site}/api/auth`) {
+      add('warn', 'Produzione', `redirect_uri inviato a GitHub (${redirectUri}) diverso da ${site}/api/auth.`, '/setup-cms')
+    }
+  } else if (auth?.text.includes('Errore di configurazione')) {
+    add('todo', 'Produzione', 'OAUTH_CLIENT_ID / OAUTH_CLIENT_SECRET mancanti in Production (o deploy precedente alla loro aggiunta).', '/setup-cms')
+  } else {
+    add('todo', 'Produzione', `/api/auth risposta inattesa (${auth ? auth.status : 'nessuna risposta'}).`, '/setup-cms')
+  }
+  add('info', 'Produzione', 'Non verificabili da qui: callback della GitHub OAuth App, login reale a /admin, ricezione email del form.')
+}
+
+// ── Registro passaggi (setup-progress.md) ───────────────────────────────────
+const progress = read('setup-progress.md')
+const openSteps = []
+if (progress == null) {
+  add('info', 'Passaggi', 'setup-progress.md non presente: lo crea la skill /setup al primo avvio.', '/setup')
+} else {
+  const steps = [...progress.matchAll(/^- \[( |x|-)\] (\d+\.\d+) (.+)$/gm)]
+    .map(([, mark, id, text]) => ({ mark, id, text: text.split(' — ')[0] }))
+  const open = steps.filter((st) => st.mark === ' ')
+  const declined = steps.filter((st) => st.mark === '-').length
+  const done = steps.filter((st) => st.mark === 'x').length
+  // I passaggi della fase 8 (chiusura) si chiudono proprio dopo questo controllo
+  const openBeforeClosing = open.filter((st) => !st.id.startsWith('8.'))
+  if (open.length === 0) {
+    add('ok', 'Passaggi', `Tutti i ${steps.length} passaggi chiusi (${done} fatti, ${declined} non voluti).`)
+  } else if (openBeforeClosing.length === 0) {
+    add('ok', 'Passaggi', `Restano solo i passaggi di chiusura (${open.map((st) => st.id).join(', ')}): ${done} fatti, ${declined} non voluti.`)
+  } else {
+    add('todo', 'Passaggi', `${open.length} passaggi aperti su ${steps.length} (${done} fatti, ${declined} non voluti). Primo da fare: ${open[0].id} ${open[0].text}`, '/setup')
+    openSteps.push(...open)
+  }
 }
 
 // ── Output ──────────────────────────────────────────────────────────────────
@@ -145,6 +237,10 @@ for (const r of results) {
   }
   console.log(`  ${ICON[r.status]} ${r.message}${r.fix && r.status !== 'ok' ? `  → ${r.fix}` : ''}`)
 }
+if (openSteps.length > 0) {
+  console.log('\nPassaggi aperti in setup-progress.md')
+  for (const st of openSteps) console.log(`  [ ] ${st.id} ${st.text}`)
+}
 const todo = results.filter((r) => r.status === 'todo').length
 const warn = results.filter((r) => r.status === 'warn').length
-console.log(`\n${todo === 0 ? 'Nessun passaggio bloccante.' : `${todo} passaggi da completare`}${warn ? `, ${warn} avvisi` : ''}.`)
+console.log(`\n${todo === 0 ? 'Nessun controllo bloccante (✗)' : `${todo} controlli non superati (✗)`}${warn ? `, ${warn} avvisi (!)` : ''}.`)

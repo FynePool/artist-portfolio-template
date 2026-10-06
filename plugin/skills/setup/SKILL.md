@@ -65,8 +65,8 @@ Regole: minuscole, numeri, trattini; inizia con una lettera; massimo 40 caratter
 
 Verifica la disponibilità:
 - GitHub: `gh repo view OWNER/NOME` deve fallire con "not found" (o connettore: repo inesistente).
-- Vercel: `curl -sI https://NOME.vercel.app` → `404` con header `x-vercel-error: DEPLOYMENT_NOT_FOUND`
-  ⇒ libero; `200` ⇒ già usato, proponi alternative (`NOME-art`, `NOME-studio`…). Se non puoi fare
+- Vercel: fai una richiesta HTTP HEAD all'indirizzo `NOME.vercel.app` (https): risposta `404` con header
+  `x-vercel-error: DEPLOYMENT_NOT_FOUND` ⇒ libero; `200` ⇒ già usato, proponi alternative (`NOME-art`, `NOME-studio`…). Se non puoi fare
   richieste HTTP, la conferma arriva in A4 (dominio effettivamente assegnato).
 
 ## A3 — Repo privata dal template
@@ -87,12 +87,7 @@ Verifica: la repo esiste, è **privata** (`gh repo view OWNER/NOME --json visibi
 o connettore, o conferma dell'utente dalla pagina della repo) e contiene `package.json`.
 
 Se l'utente proseguirà **sul computer** e hai la shell: chiedi la cartella di destinazione
-(es. `~/Documents`) e clona:
-
-```bash
-gh repo clone OWNER/NOME "CARTELLA/NOME"    # oppure: git clone https://github.com/OWNER/NOME.git
-```
-
+(es. `~/Documents`) e clona la repo `OWNER/NOME` in `CARTELLA/NOME` con GitHub CLI (o con git).
 Poi, nella cartella clonata, imposta l'autore dei commit sull'account GitHub del proprietario
 (requisito Vercel Hobby, vedi A1). Leggi login, nome e ID numerico con
 `gh api user --jq '.login, .name, .id'` (senza CLI: chiedili all'utente) e scrivili nella config
@@ -137,7 +132,7 @@ il primo deploy di produzione):
    3.4 (dopo A6). Tutto il resto resta `[ ]`.
 
 Come:
-- **Con la cartella clonata**: modifica i file, `git add -A && git commit -m "Avvio: configura repo, registro setup, rimuove plugin" && git push`.
+- **Con la cartella clonata**: modifica i file, poi `git add -A`, `git commit -m "Avvio: configura repo, registro setup, rimuove plugin"` e `git push`.
 - **Senza clone** (es. Claude in chat o Cowork): con il connettore GitHub crea/aggiorna e cancella
   i file direttamente su `main`. Se non è disponibile, lascia questi passaggi a `/setup` (resteranno
   `[ ]` nel registro: 1.2 e 1.3 li esegue `/setup-repo`) e il primo deploy di produzione partirà al
@@ -146,7 +141,7 @@ Come:
 ## A6 — Sito online
 
 Attendi che il deploy di produzione sia **Ready** (connettore: elenco deployment del progetto; CLI:
-`vercel ls`). Verifica che `https://NOME.vercel.app` risponda 200 (`curl -sI`, oppure strumento del
+`vercel ls`). Verifica che `NOME.vercel.app` risponda 200 (richiesta HTTP HEAD, oppure strumento del
 connettore per leggere un URL Vercel, oppure l'utente lo apre). Il sito mostra ancora i contenuti di
 esempio: è normale, si sostituiscono nel setup. Aggiorna 3.4 nel registro (commit separato se serve).
 
